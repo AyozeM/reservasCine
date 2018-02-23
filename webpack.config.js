@@ -5,6 +5,10 @@ module.exports = {
     main:[
       './src/js/main.js',
       './src/sass/main.scss'
+    ],
+    filmDetail:[
+      './src/js/filmDetail.js',
+      './src/sass/filmDetail.scss'
     ]
   },
   output: {

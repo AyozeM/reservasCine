@@ -1,16 +1,18 @@
 import $ from 'jquery';
-import {getLibrary} from './templates/libraryTemplate';
+import *  as template from'./templates/pageTemplate';
 let cinema,films;
 
 $(document).ready(()=>{
-    getLibrary();
+    template.setLibs(['fontAwsome']);
+    template.setHeader();
+    template.setFooter();
     getData();
     writeFilms();
     $('section').on('click','.smallFilm',e=>{
         localStorage.setItem('selectedFilm',$(e.currentTarget).attr('id'));
         $('<span class="spinner"><i class="fas fa-spinner fa-pulse"></i></span>').appendTo('body');
         setTimeout(()=>{
-            window.location = `${window.location.href}html/cinemaRoom.html`;
+            window.location = `${window.location.href}html/filmDetail.html`;
         },1000);
     });
 });

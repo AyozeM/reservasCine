@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "dist/js/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -11026,15 +11026,21 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 5 */
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(6);
-module.exports = __webpack_require__(9);
+__webpack_require__(12);
+module.exports = __webpack_require__(13);
 
 
 /***/ }),
-/* 6 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11044,66 +11050,61 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__templates_pageTemplate__ = __webpack_require__(1);
 
 
-let cinema,films;
-
+let filmId;
 __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).ready(()=>{
-    __WEBPACK_IMPORTED_MODULE_1__templates_pageTemplate__["c" /* setLibs */](['fontAwsome']);
     __WEBPACK_IMPORTED_MODULE_1__templates_pageTemplate__["b" /* setHeader */]();
     __WEBPACK_IMPORTED_MODULE_1__templates_pageTemplate__["a" /* setFooter */]();
-    getData();
-    writeFilms();
-    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('section').on('click','.smallFilm',e=>{
-        localStorage.setItem('selectedFilm',__WEBPACK_IMPORTED_MODULE_0_jquery___default()(e.currentTarget).attr('id'));
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<span class="spinner"><i class="fas fa-spinner fa-pulse"></i></span>').appendTo('body');
-        setTimeout(()=>{
-            window.location = `${window.location.href}html/filmDetail.html`;
-        },1000);
-    });
+    writePage();
 });
-const writeFilms = () =>{
-    const container = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('section');
-    films.results.map(e=>{
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<div>',{id:e.id,class:'smallFilm'}).append(
-            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<img>',{src:`img/${e.poster}`,alt:e.name})
-        ).append(
-            __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span>${e.name}</span>`)
-        ).appendTo(container);
+/** 
+ * Obtiene los datos de la pelicula actual
+*/
+const getFilm = () =>{
+    filmId = localStorage.getItem('selectedFilm');
+    let films = JSON.parse(localStorage.getItem('films'));
+    return films.results.find(e=>e.id == filmId)
+}
+/** 
+ * Vuelca la informacion de la pelicula en la pagina
+*/
+const writePage = () =>{
+    let film = getFilm();
+    let timeTable = getTimeTable();
+    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.poster').find('img').attr('src',`../img/${film.poster}`).attr('alt',`Portada de la película ${film.name}`);
+    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.sinopsis').find('span').text(film.sinopsis);
+    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.trailer').find('iframe').attr('src',film.trailer);
+    timeTable.map(e=>{
+        e.hours.map(y=>{
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<div>').append(
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span>${y.hour}</span>`)
+            ).append(
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span>${e.room}</span>`)
+            ).append(
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span>Buscar asiento</span>`)
+            ).appendTo('.timeTable')
+        })
+    })
+}
+const getTimeTable = () =>{
+    let cinema = JSON.parse(localStorage.getItem('cinema'));
+    let timeTable = [];
+    cinema.rooms.map((e,i)=>{
+        timeTable.push({
+            room:i+1,
+            hours:e.timeTable.filter(y=>y.film == filmId)
+        })
     });
-}
-
-const getData = () =>{
-    cinema = JSON.parse(localStorage.getItem("cinema"));
-    if(cinema == null){
-        cinema = __webpack_require__(7);
-        localStorage.setItem("cinema",JSON.stringify(cinema));
-    }
-    films = JSON.parse(localStorage.getItem("films"));
-    if(films == null){
-        films = __webpack_require__(8);
-        localStorage.setItem("films",JSON.stringify(films));
-    }
+    return timeTable;
 }
 
 /***/ }),
-/* 7 */
-/***/ (function(module, exports) {
-
-module.exports = {"rooms":[{"actualFilm":"","timeTable":[{"hour":"10:00","film":"marte"},{"hour":"11:00","film":"ff8"},{"hour":"12:00","film":"PCVenganzaSalazar"},{"hour":"13:00","film":"loboWallStreet"},{"hour":"16:00","film":"titanic"},{"hour":"17:00","film":"ff8"},{"hour":"18:00","film":"marte"},{"hour":"19:00","film":"americanPlayboy"},{"hour":"20:00","film":"loboWallStreet"},{"hour":"21:00","film":"PCVenganzaSalazar"},{"hour":"22:00","film":"sexTape"},{"hour":"23:00","film":"fiestaSalchichas"},{"hour":"00:00","film":"interstellar"},{"hour":"01:00","film":"taxi3"}],"chairs":{"rows":5,"columns":10,"selectedChairs":[]}}]}
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
-module.exports = {"results":[{"id":"titanic","name":"Titanic","sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!","poster":"titanic.jpg","trailer":"https://www.youtube.com/embed/kVrqfYjkTdQ","price":7.5},{"id":"ff8","name":"Fast and Furious 8","sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!","poster":"fastAndFurius8.jpg","trailer":"https://www.youtube.com/embed/19uRZ0vVVbA","price":7.5},{"id":"marte","name":"Marte","sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!","poster":"marte.jpg","trailer":"https://www.youtube.com/embed/TYzLCBh_S-I","price":7.5},{"id":"americanPlayboy","name":"American Playboy","sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!","poster":"americanPlayboy.jpg","trailer":"https://www.youtube.com/embed/qcMgjfWcPKg","price":7.5},{"id":"loboWallStreet","name":"El lobo de wall street","sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!","poster":"elLoboDeWallStreet.jpg","trailer":"https://www.youtube.com/embed/DEMZSa0esCU","price":7.5},{"id":"PCVenganzaSalazar","name":"Piratas del caribe: la venganza de salazar","sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!","poster":"PCLvenganzaDeSalazar.jpg","trailer":"https://www.youtube.com/embed/azjsS0wxTA8","price":7.5},{"id":"sexTape","name":"Sex Tape: Algo pasa en la nube","sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!","poster":"sexTapeAlgoPasaEnLaNube.jpg","trailer":"https://www.youtube.com/embed/edENys4Jj8I","price":7.5},{"id":"fiestaSalchichas","name":"La fiesta de las salchichas","sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!","poster":"laFiestaDeLasSalchichas.jpg","trailer":"https://www.youtube.com/embed/F2kP5_GNnTc","price":7.5},{"id":"interstellar","name":"Interstellar","sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!","poster":"interstellar.jpg","trailer":"https://www.youtube.com/embed/hhCtMhk8eHo","price":7.5},{"id":"taxi3","name":"Taxi 3","sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!","poster":"taxi3.jpg","trailer":"https://www.youtube.com/embed/BQ5ybR28o-w","price":7.5}]}
-
-/***/ }),
-/* 9 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(10);
+var content = __webpack_require__(14);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -11117,8 +11118,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./main.scss", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./main.scss");
+		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./filmDetail.scss", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./filmDetail.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -11128,7 +11129,7 @@ if(false) {
 }
 
 /***/ }),
-/* 10 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(false);
@@ -11136,7 +11137,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box; }\n\nhtml, body {\n  width: 100%;\n  height: 100%; }\n\nbody {\n  background-color: steelblue;\n  position: relative; }\n\nsection {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: space-around; }\n\n.smallFilm {\n  display: flex;\n  flex-direction: column;\n  position: relative;\n  margin: 2%;\n  transition: .2s;\n  cursor: pointer; }\n  @media screen and (max-width: 768px) {\n    .smallFilm {\n      flex-direction: row; } }\n  .smallFilm img {\n    width: 200px; }\n    @media screen and (max-width: 768px) {\n      .smallFilm img {\n        height: 400px;\n        width: 100%; } }\n  .smallFilm span {\n    width: 200px;\n    position: absolute;\n    bottom: 0;\n    background-color: black;\n    color: white;\n    padding: 5%; }\n    @media screen and (max-width: 768px) {\n      .smallFilm span {\n        font-size: 2em;\n        width: 100%; } }\n  @media screen and (min-width: 768px) {\n    .smallFilm:hover {\n      transform: scale(1.2); } }\n\n.spinner {\n  position: fixed;\n  font-size: 5rem;\n  top: 50%;\n  left: 50%; }\n", ""]);
+exports.push([module.i, "* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box; }\n\nhtml, body {\n  width: 100%;\n  height: 100%; }\n\nbody {\n  background-color: gray; }\n", ""]);
 
 // exports
 

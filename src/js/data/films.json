@@ -1,0 +1,93 @@
+{
+    "results":[
+        {
+            "id":"titanic",
+            "name":"Titanic",
+            "sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!",
+            "poster":"titanic.jpg",
+            "trailer":"https://www.youtube.com/embed/kVrqfYjkTdQ",
+            "price":7.5
+        }
+        ,            
+        {
+            "id":"ff8",
+            "name":"Fast and Furious 8",
+            "sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!",
+            "poster":"fastAndFurius8.jpg",
+            "trailer":"https://www.youtube.com/embed/19uRZ0vVVbA",
+            "price":7.5
+        }
+        ,            
+        {
+            "id":"marte",
+            "name":"Marte",
+            "sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!",
+            "poster":"marte.jpg",
+            "trailer":"https://www.youtube.com/embed/TYzLCBh_S-I",
+            "price":7.5
+        }
+        ,            
+        {
+            "id":"americanPlayboy",
+            "name":"American Playboy",
+            "sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!",
+            "poster":"americanPlayboy.jpg",
+            "trailer":"https://www.youtube.com/embed/qcMgjfWcPKg",
+            "price":7.5
+        }
+        ,            
+        {
+            "id":"loboWallStreet",
+            "name":"El lobo de wall street",
+            "sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!",
+            "poster":"elLoboDeWallStreet.jpg",
+            "trailer":"https://www.youtube.com/embed/DEMZSa0esCU",
+            "price":7.5
+        }
+        ,            
+        {
+            "id":"PCVenganzaSalazar",
+            "name":"Piratas del caribe: la venganza de salazar",
+            "sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!",
+            "poster":"PCLvenganzaDeSalazar.jpg",
+            "trailer":"https://www.youtube.com/embed/azjsS0wxTA8",
+            "price":7.5
+        }
+        ,            
+        {
+            "id":"sexTape",
+            "name":"Sex Tape: Algo pasa en la nube",
+            "sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!",
+            "poster":"sexTapeAlgoPasaEnLaNube.jpg",
+            "trailer":"https://www.youtube.com/embed/edENys4Jj8I",
+            "price":7.5
+        }
+        ,            
+        {
+            "id":"fiestaSalchichas",
+            "name":"La fiesta de las salchichas",
+            "sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!",
+            "poster":"laFiestaDeLasSalchichas.jpg",
+            "trailer":"https://www.youtube.com/embed/F2kP5_GNnTc",
+            "price":7.5
+        }
+        ,            
+        {
+            "id":"interstellar",
+            "name":"Interstellar",
+            "sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!",
+            "poster":"interstellar.jpg",
+            "trailer":"https://www.youtube.com/embed/hhCtMhk8eHo",
+            "price":7.5
+        }
+        ,            
+        {
+            "id":"taxi3",
+            "name":"Taxi 3",
+            "sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!",
+            "poster":"taxi3.jpg",
+            "trailer":"https://www.youtube.com/embed/BQ5ybR28o-w",
+            "price":7.5
+        }
+    ]
+}

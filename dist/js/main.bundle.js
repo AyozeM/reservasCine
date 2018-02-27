@@ -11053,7 +11053,7 @@ __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).ready(()=>{
     getData();
     writeFilms();
     __WEBPACK_IMPORTED_MODULE_0_jquery___default()('section').on('click','.smallFilm',e=>{
-        localStorage.setItem('selectedFilm',__WEBPACK_IMPORTED_MODULE_0_jquery___default()(e.currentTarget).attr('id'));
+        localStorage.setItem('selectedFilm',JSON.stringify({film:__WEBPACK_IMPORTED_MODULE_0_jquery___default()(e.currentTarget).attr('id')}));
         __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<span class="spinner"><i class="fas fa-spinner fa-pulse"></i></span>').appendTo('body');
         setTimeout(()=>{
             window.location = `${window.location.href}html/filmDetail.html`;
@@ -11088,7 +11088,7 @@ const getData = () =>{
 /* 7 */
 /***/ (function(module, exports) {
 
-module.exports = {"rooms":[{"actualFilm":"","timeTable":[{"hour":"10:00","film":"marte"},{"hour":"11:00","film":"ff8"},{"hour":"12:00","film":"PCVenganzaSalazar"},{"hour":"13:00","film":"loboWallStreet"},{"hour":"16:00","film":"titanic"},{"hour":"17:00","film":"ff8"},{"hour":"18:00","film":"marte"},{"hour":"19:00","film":"americanPlayboy"},{"hour":"20:00","film":"loboWallStreet"},{"hour":"21:00","film":"PCVenganzaSalazar"},{"hour":"22:00","film":"sexTape"},{"hour":"23:00","film":"fiestaSalchichas"},{"hour":"00:00","film":"interstellar"},{"hour":"01:00","film":"taxi3"}],"chairs":{"rows":5,"columns":10,"selectedChairs":[]}}]}
+module.exports = {"rooms":[{"actualFilm":"","timeTable":[{"hour":"10:00","film":"marte"},{"hour":"11:00","film":"ff8"},{"hour":"12:00","film":"PCVenganzaSalazar"},{"hour":"13:00","film":"loboWallStreet"},{"hour":"16:00","film":"titanic"},{"hour":"17:00","film":"ff8"},{"hour":"18:00","film":"marte"},{"hour":"19:00","film":"americanPlayboy"},{"hour":"20:00","film":"loboWallStreet"},{"hour":"21:00","film":"PCVenganzaSalazar"},{"hour":"22:00","film":"sexTape"},{"hour":"23:00","film":"fiestaSalchichas"},{"hour":"00:00","film":"interstellar"},{"hour":"01:00","film":"taxi3"}],"chairs":{"rows":5,"columns":10,"selectedChairs":[{"hour":"18:00","film":"marte","boughtChairs":[{"row":1,"column":1}]}]}}]}
 
 /***/ }),
 /* 8 */

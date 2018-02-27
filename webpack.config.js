@@ -9,6 +9,14 @@ module.exports = {
     filmDetail:[
       './src/js/filmDetail.js',
       './src/sass/filmDetail.scss'
+    ],
+    cinemaRoom:[
+      './src/js/cinemaRoom.js',
+      './src/sass/cinemaRoom.scss'
+    ],
+    paimentPage:[
+      './src/js/paimentPage.js',
+      './src/sass/paimentPage.scss'
     ]
   },
   output: {

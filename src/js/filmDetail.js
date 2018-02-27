@@ -5,12 +5,22 @@ $(document).ready(()=>{
     template.setHeader();
     template.setFooter();
     writePage();
+    $('iframe').css('height',$('iframe').width()/4)
+    $('.timeTable').on('click','.btnFindChair',e=>{
+        let aux = {
+            film:filmId,
+            hour:$(e.currentTarget).prev().prev().text(),
+            room:parseInt($(e.currentTarget).prev().text())
+        }
+        localStorage.setItem('selectedFilm',JSON.stringify(aux));
+        window.location = window.location.href.replace('filmDetail','cinemaRoom');
+    });
 });
 /** 
  * Obtiene los datos de la pelicula actual
 */
 const getFilm = () =>{
-    filmId = localStorage.getItem('selectedFilm');
+    filmId = JSON.parse(localStorage.getItem('selectedFilm')).film;
     let films = JSON.parse(localStorage.getItem('films'));
     return films.results.find(e=>e.id == filmId)
 }
@@ -30,7 +40,7 @@ const writePage = () =>{
             ).append(
                 $(`<span>${e.room}</span>`)
             ).append(
-                $(`<span>Buscar asiento</span>`)
+                $(`<span class="btnFindChair" data-room="${e.room}" data-hour="${y.hour}">Elige tu asiento</span>`)
             ).appendTo('.timeTable')
         })
     })

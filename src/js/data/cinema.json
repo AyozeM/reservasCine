@@ -5,74 +5,85 @@
             "timeTable":[
                 {
                     "hour":"10:00",
-                    "film":"marte"
+                    "film":"marte"                    
                 },
                 {
                     "hour":"11:00",
-                    "film":"ff8"
+                    "film":"ff8"                    
                 },
                 {
                     "hour":"12:00",
-                    "film":"PCVenganzaSalazar"
+                    "film":"PCVenganzaSalazar"                    
                 },
                 {
                     "hour":"13:00",
-                    "film":"loboWallStreet"
+                    "film":"loboWallStreet"                    
                 },
                 {
                     "hour":"16:00",
-                    "film":"titanic"
+                    "film":"titanic"                    
                 }
                 ,
                 {
                     "hour":"17:00",
-                    "film":"ff8"
+                    "film":"ff8"                    
                 }
                 ,
                 {
                     "hour":"18:00",
-                    "film":"marte"
+                    "film":"marte"                    
                 }
                 ,
                 {
                     "hour":"19:00",
-                    "film":"americanPlayboy"
+                    "film":"americanPlayboy"                    
                 }
                 ,
                 {
                     "hour":"20:00",
-                    "film":"loboWallStreet"
+                    "film":"loboWallStreet"                    
                 }
                 ,
                 {
                     "hour":"21:00",
-                    "film":"PCVenganzaSalazar"
+                    "film":"PCVenganzaSalazar"                    
                 }
                 ,
                 {
                     "hour":"22:00",
-                    "film":"sexTape"
+                    "film":"sexTape"                    
                 }
                 ,
                 {
                     "hour":"23:00",
-                    "film":"fiestaSalchichas"
+                    "film":"fiestaSalchichas"                    
                 }
                 ,
                 {
                     "hour":"00:00",
-                    "film":"interstellar"
+                    "film":"interstellar"                    
                 }
                 ,
                 {
                     "hour":"01:00",
-                    "film":"taxi3"
+                    "film":"taxi3"                    
                 }
             ],
             "chairs":{
                 "rows":5,
                 "columns":10,
-                "selectedChairs":[]
+                "selectedChairs":[
+                    {
+                        "hour":"18:00",
+                        "film":"marte",
+                        "boughtChairs":[
+                            {
+                                "row":1,
+                                "column":1
+                            }
+                        ]
+                    }
+                ]
             }
         }
     ]

@@ -1,5 +1,37 @@
 @import './_general.scss';
 
-body{
-    background-color: $mainColor;
+section{
+    display: flex;
+    padding: 1%;
+    aside{
+        padding: 1%;
+    }
+    .description{
+        h3{
+            padding:1% 0;
+            border-bottom: thin solid;
+            margin-bottom: 1%;
+        }
+        iframe{
+            width: 100%;
+        }   
+    }
+    .timeTable{
+        flex-basis:100%;
+        div{
+            display: flex;
+            span{
+                flex-basis: (100%/3);
+                padding:.75%;
+                text-align: center;
+            }
+            &:nth-child(2n+2){
+                background-color:red;
+            }
+            .btnFindChair{
+                background-color: blue;
+                cursor: pointer;
+            }
+        }
+    }
 }

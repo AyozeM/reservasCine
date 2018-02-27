@@ -9,7 +9,7 @@ $(document).ready(()=>{
     getData();
     writeFilms();
     $('section').on('click','.smallFilm',e=>{
-        localStorage.setItem('selectedFilm',$(e.currentTarget).attr('id'));
+        localStorage.setItem('selectedFilm',JSON.stringify({film:$(e.currentTarget).attr('id')}));
         $('<span class="spinner"><i class="fas fa-spinner fa-pulse"></i></span>').appendTo('body');
         setTimeout(()=>{
             window.location = `${window.location.href}html/filmDetail.html`;

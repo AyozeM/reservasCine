@@ -1,0 +1,32 @@
+@import './_general.scss';
+svg{
+    border: thin solid;
+}
+section{
+    display: flex;
+    justify-content: center;
+}
+#screen{
+    fill:lightblue;
+}
+
+.pasillo{
+    fill:red;
+}
+.salida{
+    fill:blue;
+}
+
+use{
+    cursor: pointer;
+}
+
+.ocupado{
+    fill:red !important;
+}
+.escogido{
+    fill:green !important;
+}
+.free{
+    fill:lightblue;
+}

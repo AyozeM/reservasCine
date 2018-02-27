@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "dist/js/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 15);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -11032,15 +11032,19 @@ module.exports = function (css) {
 /* 8 */,
 /* 9 */,
 /* 10 */,
-/* 11 */
+/* 11 */,
+/* 12 */,
+/* 13 */,
+/* 14 */,
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(12);
-module.exports = __webpack_require__(13);
+__webpack_require__(16);
+module.exports = __webpack_require__(18);
 
 
 /***/ }),
-/* 12 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11048,73 +11052,107 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__templates_pageTemplate__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__classes_chair__ = __webpack_require__(17);
 
 
-let filmId;
+
+let selectedChairs = [];
 __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).ready(()=>{
     __WEBPACK_IMPORTED_MODULE_1__templates_pageTemplate__["b" /* setHeader */]();
     __WEBPACK_IMPORTED_MODULE_1__templates_pageTemplate__["a" /* setFooter */]();
-    writePage();
-    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('iframe').css('height',__WEBPACK_IMPORTED_MODULE_0_jquery___default()('iframe').width()/4)
-    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.timeTable').on('click','.btnFindChair',e=>{
-        let aux = {
-            film:filmId,
-            hour:__WEBPACK_IMPORTED_MODULE_0_jquery___default()(e.currentTarget).prev().prev().text(),
-            room:parseInt(__WEBPACK_IMPORTED_MODULE_0_jquery___default()(e.currentTarget).prev().text())
-        }
-        localStorage.setItem('selectedFilm',JSON.stringify(aux));
-        window.location = window.location.href.replace('filmDetail','cinemaRoom');
-    });
-});
-/** 
- * Obtiene los datos de la pelicula actual
-*/
-const getFilm = () =>{
-    filmId = JSON.parse(localStorage.getItem('selectedFilm')).film;
-    let films = JSON.parse(localStorage.getItem('films'));
-    return films.results.find(e=>e.id == filmId)
-}
-/** 
- * Vuelca la informacion de la pelicula en la pagina
-*/
-const writePage = () =>{
-    let film = getFilm();
-    let timeTable = getTimeTable();
-    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.poster').find('img').attr('src',`../img/${film.poster}`).attr('alt',`Portada de la película ${film.name}`);
-    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.sinopsis').find('span').text(film.sinopsis);
-    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.trailer').find('iframe').attr('src',film.trailer);
-    timeTable.map(e=>{
-        e.hours.map(y=>{
-            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<div>').append(
-                __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span>${y.hour}</span>`)
-            ).append(
-                __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span>${e.room}</span>`)
-            ).append(
-                __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span class="btnFindChair" data-room="${e.room}" data-hour="${y.hour}">Elige tu asiento</span>`)
-            ).appendTo('.timeTable')
-        })
+    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('use').click(e=>{
+        const tag = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e.currentTarget);
+        tag.hasClass('ocupado')?alert('asiento ocupado'):
+        tag.toggleClass('escogido');
     })
-}
-const getTimeTable = () =>{
-    let cinema = JSON.parse(localStorage.getItem('cinema'));
-    let timeTable = [];
-    cinema.rooms.map((e,i)=>{
-        timeTable.push({
-            room:i+1,
-            hours:e.timeTable.filter(y=>y.film == filmId)
-        })
+    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('#reserve').click(e=>{
+        e.preventDefault();
+        let x = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.escogido');
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.escogido').each(function(i){
+            selectedChairs.push({
+                row:__WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).closest('g').data('row'),
+                column:__WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).data('column')
+            });
+        });
+        localStorage.setItem('reservedChairs',JSON.stringify(selectedChairs));
+
+        window.location = window.location.href.replace('cinemaRoom','paimentPage');
     });
-    return timeTable;
+    getRoomInfo();
+});
+
+const getRoomInfo = () =>{
+    let cinema = JSON.parse(localStorage.getItem('cinema'));
+    let roomInfo = JSON.parse(localStorage.getItem('selectedFilm'))
+    setBoughtChairs(cinema.rooms[roomInfo.room-1].chairs.selectedChairs.find(e=>e.hour==roomInfo.hour&&e.film==roomInfo.film).boughtChairs);
+}
+
+const setBoughtChairs = boughtChairs =>{
+    boughtChairs.map(e=>{
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document.querySelector('.chairs').children[e.row-1].children[e.column-1]).addClass('ocupado');
+    });
 }
 
 /***/ }),
-/* 13 */
+/* 17 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/**
+ * Clase butaca
+ * @class
+ */
+class chair{
+    /**
+     *@constructor
+     */
+    constructor(data){
+        this.row = data.row;
+        this.column = data.column;
+        this.state = data.state;
+        this.room = data.room;
+        this.svgns = 'http://www.w3.org/2000/svg';
+        this.xlinks = 'http://www.w3.org/1999/xlink';
+    }
+    
+    draw(){        
+        let useTag = document.createElementNS(this.svgns,'use');
+        useTag.setAttributeNS(this.xlinks,'href','#chair');
+        this.room.appendChild(useTag);
+    }
+
+    /*
+        Getters and setters
+    */
+    setRow(newRow){
+        if(newRow > 0 && newRow <= 5){
+            this.row = newRow;
+        }
+    }
+    setColumn(newColumn){
+        if(newColumn > 0 && newColumn <= 5){
+            this.column = newColumn;
+        }
+    }
+
+    getRow(){
+        return this.row;
+    }
+    getColumn(){
+        return this.column;
+    }
+}
+
+/* unused harmony default export */ var _unused_webpack_default_export = (chair);
+
+/***/ }),
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(14);
+var content = __webpack_require__(19);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -11128,8 +11166,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./filmDetail.scss", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./filmDetail.scss");
+		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./cinemaRoom.scss", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./cinemaRoom.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -11139,7 +11177,7 @@ if(false) {
 }
 
 /***/ }),
-/* 14 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(false);
@@ -11147,7 +11185,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box; }\n\nhtml, body {\n  width: 100%;\n  height: 100%; }\n\nsection {\n  display: flex;\n  padding: 1%; }\n  section aside {\n    padding: 1%; }\n  section .description h3 {\n    padding: 1% 0;\n    border-bottom: thin solid;\n    margin-bottom: 1%; }\n  section .description iframe {\n    width: 100%; }\n  section .timeTable {\n    flex-basis: 100%; }\n    section .timeTable div {\n      display: flex; }\n      section .timeTable div span {\n        flex-basis: 33.33333%;\n        padding: .75%;\n        text-align: center; }\n      section .timeTable div:nth-child(2n+2) {\n        background-color: red; }\n      section .timeTable div .btnFindChair {\n        background-color: blue;\n        cursor: pointer; }\n", ""]);
+exports.push([module.i, "* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box; }\n\nhtml, body {\n  width: 100%;\n  height: 100%; }\n\nsvg {\n  border: thin solid; }\n\nsection {\n  display: flex;\n  justify-content: center; }\n\n#screen {\n  fill: lightblue; }\n\n.pasillo {\n  fill: red; }\n\n.salida {\n  fill: blue; }\n\nuse {\n  cursor: pointer; }\n\n.ocupado {\n  fill: red !important; }\n\n.escogido {\n  fill: green !important; }\n\n.free {\n  fill: lightblue; }\n", ""]);
 
 // exports
 

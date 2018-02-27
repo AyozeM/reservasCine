@@ -1,14 +1,25 @@
+/**
+ * Clase butaca
+ * @class
+ */
 class chair{
+    /**
+     *@constructor
+     */
     constructor(data){
-        if(data != undefined){
-            this.row = data.row;
-            this.column = data.column;
-            this.state = data.state;
-        }else{
-
-        }
+        this.row = data.row;
+        this.column = data.column;
+        this.state = data.state;
+        this.room = data.room;
+        this.svgns = 'http://www.w3.org/2000/svg';
+        this.xlinks = 'http://www.w3.org/1999/xlink';
     }
     
+    draw(){        
+        let useTag = document.createElementNS(this.svgns,'use');
+        useTag.setAttributeNS(this.xlinks,'href','#chair');
+        this.room.appendChild(useTag);
+    }
 
     /*
         Getters and setters
@@ -24,6 +35,12 @@ class chair{
         }
     }
 
-    getRow = ()=>this.row;
-    getColumn = () => this.column;
+    getRow(){
+        return this.row;
+    }
+    getColumn(){
+        return this.column;
+    }
 }
+
+export default chair;

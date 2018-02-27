@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "dist/js/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 20);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -11032,15 +11032,24 @@ module.exports = function (css) {
 /* 8 */,
 /* 9 */,
 /* 10 */,
-/* 11 */
+/* 11 */,
+/* 12 */,
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(12);
-module.exports = __webpack_require__(13);
+__webpack_require__(21);
+module.exports = __webpack_require__(23);
 
 
 /***/ }),
-/* 12 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11048,73 +11057,152 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__templates_pageTemplate__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__classes_progressBar__ = __webpack_require__(22);
 
 
-let filmId;
+
 __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).ready(()=>{
     __WEBPACK_IMPORTED_MODULE_1__templates_pageTemplate__["b" /* setHeader */]();
     __WEBPACK_IMPORTED_MODULE_1__templates_pageTemplate__["a" /* setFooter */]();
-    writePage();
-    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('iframe').css('height',__WEBPACK_IMPORTED_MODULE_0_jquery___default()('iframe').width()/4)
-    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.timeTable').on('click','.btnFindChair',e=>{
-        let aux = {
-            film:filmId,
-            hour:__WEBPACK_IMPORTED_MODULE_0_jquery___default()(e.currentTarget).prev().prev().text(),
-            room:parseInt(__WEBPACK_IMPORTED_MODULE_0_jquery___default()(e.currentTarget).prev().text())
-        }
-        localStorage.setItem('selectedFilm',JSON.stringify(aux));
-        window.location = window.location.href.replace('filmDetail','cinemaRoom');
-    });
-});
-/** 
- * Obtiene los datos de la pelicula actual
-*/
-const getFilm = () =>{
-    filmId = JSON.parse(localStorage.getItem('selectedFilm')).film;
-    let films = JSON.parse(localStorage.getItem('films'));
-    return films.results.find(e=>e.id == filmId)
-}
-/** 
- * Vuelca la informacion de la pelicula en la pagina
-*/
-const writePage = () =>{
-    let film = getFilm();
-    let timeTable = getTimeTable();
-    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.poster').find('img').attr('src',`../img/${film.poster}`).attr('alt',`Portada de la película ${film.name}`);
-    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.sinopsis').find('span').text(film.sinopsis);
-    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.trailer').find('iframe').attr('src',film.trailer);
-    timeTable.map(e=>{
-        e.hours.map(y=>{
-            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<div>').append(
-                __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span>${y.hour}</span>`)
-            ).append(
-                __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span>${e.room}</span>`)
-            ).append(
-                __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span class="btnFindChair" data-room="${e.room}" data-hour="${y.hour}">Elige tu asiento</span>`)
-            ).appendTo('.timeTable')
-        })
+    let x = new __WEBPACK_IMPORTED_MODULE_2__classes_progressBar__["a" /* default */](parts,__WEBPACK_IMPORTED_MODULE_0_jquery___default()('section'));
+    x.draw(getFilmInfo());
+    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('section').on('click','.btn',e=>{
+        e.preventDefault();
+        x.next();
     })
+});
+
+const getFilmInfo = () =>{
+    let selectedFilm = JSON.parse(localStorage.getItem('selectedFilm'));
+    const films = JSON.parse(localStorage.getItem('films'));
+    let aux = films.results.find(e=>e.id==selectedFilm.film);
+    let tickets = JSON.parse(localStorage.getItem('reservedChairs'));
+    selectedFilm.img = `/dist/img/${aux.poster}`;
+    selectedFilm.price = aux.price;
+    selectedFilm.film = aux.name;
+    selectedFilm.tickets = tickets.length;
+    return selectedFilm;
 }
-const getTimeTable = () =>{
-    let cinema = JSON.parse(localStorage.getItem('cinema'));
-    let timeTable = [];
-    cinema.rooms.map((e,i)=>{
-        timeTable.push({
-            room:i+1,
-            hours:e.timeTable.filter(y=>y.film == filmId)
-        })
-    });
-    return timeTable;
-}
+const parts = [
+    {
+        name:'Detalles de la compra',
+        method:data =>{
+            const classTitles = 'title'
+            return __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<div>',{class:'detailsWrapper'}).append(
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<img>',{src:data.img})
+            ).append(
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<div>',{class:'details'}).append(
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span class="${classTitles}">Película</span>`)
+                ).append(
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span>${data.film}</span>`)
+                ).append(
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span class="${classTitles}">Hora</span>`)
+                ).append(
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span>${data.hour}</span>`)
+                ).append(
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span class="${classTitles}">Sala</span>`)
+                ).append(
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span>${data.room}</span>`)
+                ).append(
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span class="${classTitles}">Precio Unidad</span>`)
+                ).append(
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span>${data.price}</span>`)
+                ).append(
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span class="${classTitles}">Numero de entradas</span>`)
+                ).append(
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span>${data.tickets}</span>`)
+                )
+            ).append(
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<div>',{class:'btnBox'}).append(
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<a href="#" class="btn">Continuar</a>`)
+                )
+            )
+            
+        }
+    },
+    {
+        name:'Formulario de pago',
+        method:() =>
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<div>',{class:'formWrapper'}).append(
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<form>').append(
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<input>',{type:'email',id:'email'})
+            ).append(
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<label for="email">Escribe tu email</label>')
+            )
+        ).append(
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<p>').append(
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<input>',{type:'email',id:'confirmEmail'})
+            ).append(
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<label for="conformEmail">Repite tu email</label>')
+            )
+        ).append(
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<p>').append(
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<input>',{type:'text',id:'creditCard'})
+            ).append(
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<label for="creditCard">Tarjeta de credito</label>')
+            )
+        ).append(
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<a href="#" class="btn">Confirmar compra</button>')
+        )
+    }
+]
 
 /***/ }),
-/* 13 */
+/* 22 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
+
+class progressBar{
+    constructor(data,container){
+        this.steps = data;
+        this.index = 0;
+        this.container = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(container);
+        this.bar();
+    }
+    clear(){
+        this.container.children().not('.bar').remove();
+    }
+    bar(){
+        const wrapper = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<nav>',{class:'bar'});
+        this.steps.map(e=>{
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<div>').append(
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span>${e.name}</span>`)
+            ).appendTo(wrapper);
+        });
+        wrapper.appendTo(this.container);
+    }
+    changeStep(){
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.bar').find('.actual').removeClass('actual');
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(__WEBPACK_IMPORTED_MODULE_0_jquery___default()('.bar').children()[this.index]).addClass('actual');
+    }
+    draw(data = null){
+        this.clear();
+        const actual = this.steps[this.index].method;
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(actual(data)).appendTo(this.container);
+        this.changeStep();
+    }
+    next(data = null){
+        this.index++;
+        this.draw(data);
+    }
+    prev(data = null){
+        this.index--;
+        this.draw(data);
+    }
+}
+/* harmony default export */ __webpack_exports__["a"] = (progressBar);
+
+/***/ }),
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(14);
+var content = __webpack_require__(24);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -11128,8 +11216,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./filmDetail.scss", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./filmDetail.scss");
+		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./paimentPage.scss", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./paimentPage.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -11139,7 +11227,7 @@ if(false) {
 }
 
 /***/ }),
-/* 14 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(false);
@@ -11147,7 +11235,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box; }\n\nhtml, body {\n  width: 100%;\n  height: 100%; }\n\nsection {\n  display: flex;\n  padding: 1%; }\n  section aside {\n    padding: 1%; }\n  section .description h3 {\n    padding: 1% 0;\n    border-bottom: thin solid;\n    margin-bottom: 1%; }\n  section .description iframe {\n    width: 100%; }\n  section .timeTable {\n    flex-basis: 100%; }\n    section .timeTable div {\n      display: flex; }\n      section .timeTable div span {\n        flex-basis: 33.33333%;\n        padding: .75%;\n        text-align: center; }\n      section .timeTable div:nth-child(2n+2) {\n        background-color: red; }\n      section .timeTable div .btnFindChair {\n        background-color: blue;\n        cursor: pointer; }\n", ""]);
+exports.push([module.i, "* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box; }\n\nhtml, body {\n  width: 100%;\n  height: 100%; }\n", ""]);
 
 // exports
 

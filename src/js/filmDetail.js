@@ -34,7 +34,7 @@ const getFilm = () =>{
 const writePage = () =>{
     let film = getFilm();
     let timeTable = getTimeTable();
-    $('.poster').find('img').attr('src',`../img/${film.poster}`).attr('alt',`Portada de la película ${film.name}`);
+    $('.poster').find('img').attr('src',`${window.location.href.includes('github')? '/dist/reservasCine/': '/dist/'}/img/${film.poster}`).attr('alt',`Portada de la película ${film.name}`);
     $('.sinopsis').find('span').text(film.sinopsis);
     $('.trailer').find('iframe').attr('src',film.trailer);
     timeTable.map(e=>{

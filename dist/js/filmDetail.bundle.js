@@ -10462,8 +10462,8 @@ const setFooter = () =>{
 */
 const setHeader = () => {
 
-    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<h1>Cines Orotava</h1>').click(e=>{
-        window.location = '/dist/';
+    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<h1>Cines Orotava</h1>').click(e=>{        
+        window.location = window.location.href.includes('github')?'reservasCine/dist/' :'/dist/';
     }).appendTo('header');    
     __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<div>',{class:'social'}).append(
         __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<span>').append(
@@ -11103,7 +11103,7 @@ const getFilm = () =>{
 const writePage = () =>{
     let film = getFilm();
     let timeTable = getTimeTable();
-    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.poster').find('img').attr('src',`../img/${film.poster}`).attr('alt',`Portada de la película ${film.name}`);
+    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.poster').find('img').attr('src',`${window.location.href.includes('github')? '/dist/reservasCine/': '/dist/'}/img/${film.poster}`).attr('alt',`Portada de la película ${film.name}`);
     __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.sinopsis').find('span').text(film.sinopsis);
     __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.trailer').find('iframe').attr('src',film.trailer);
     timeTable.map(e=>{

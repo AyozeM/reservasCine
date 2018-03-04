@@ -10462,8 +10462,8 @@ const setFooter = () =>{
 */
 const setHeader = () => {
 
-    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<h1>Cines Orotava</h1>').click(e=>{
-        window.location = '/dist/';
+    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<h1>Cines Orotava</h1>').click(e=>{        
+        window.location = window.location.href.includes('github')?'reservasCine/dist/' :'/dist/';
     }).appendTo('header');    
     __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<div>',{class:'social'}).append(
         __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<span>').append(

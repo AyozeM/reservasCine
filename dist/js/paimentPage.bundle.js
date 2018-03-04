@@ -11622,7 +11622,7 @@ const getFilmInfo = () =>{
     const films = JSON.parse(localStorage.getItem('films'));
     let aux = films.results.find(e=>e.id==selectedFilm.film);
     let tickets = JSON.parse(localStorage.getItem('reservedChairs'));
-    selectedFilm.img = `/dist/img/${aux.poster}`;
+    selectedFilm.img = `${window.location.href.includes('github')?'/reservasCine/dist/':'/dist/'}img/${aux.poster}`;
     selectedFilm.price = aux.price;
     selectedFilm.filmName = aux.name;
     selectedFilm.tickets = tickets;

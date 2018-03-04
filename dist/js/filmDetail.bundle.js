@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "dist/js/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 13);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -10445,14 +10445,15 @@ return jQuery;
 /** 
  * DB con las librerias necesarias
 */
-const libs  = {
-    fontAwsome:`<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>`
+const _libs  = {
+    fontAwsome:`<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>`,
+    toastr:`<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">`
 }
 /** 
  * Crea el pie de pagina
 */
 const setFooter = () =>{
-    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<span>Ayoze Martin Hdez - 2018</span>').appendTo('footer');
+    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<span class="date">Ayoze Martin Hdez - 2018</span>').appendTo('footer');
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = setFooter;
 
@@ -10460,7 +10461,23 @@ const setFooter = () =>{
  * Crea la cabecera
 */
 const setHeader = () => {
-    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<h1>Cines Orotava</h1>').appendTo('header');
+
+    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<h1>Cines Orotava</h1>').click(e=>{
+        window.location = '/dist/';
+    }).appendTo('header');    
+    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<div>',{class:'social'}).append(
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<span>').append(
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<i class="fab fa-facebook-square"></i>')
+        )
+    ).append(
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<span>').append(
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<i class="fab fa-twitter-square"></i>')
+        )
+    ).append(
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<span>').append(
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<i class="fab fa-google-plus-square"></i>')
+        )
+    ).appendTo('header');
 }
 /* harmony export (immutable) */ __webpack_exports__["b"] = setHeader;
 
@@ -10468,9 +10485,9 @@ const setHeader = () => {
  * Importa las librerias necesarias
  * @param {array} libs lista con los nombres de las librerias necesarias
  */
-const setLibs = (libs) =>{
+const setLibs = libs =>{
     libs.map(e=>{
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(libs[e]).appendTo('head');
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(_libs[e]).appendTo('head');
     })
 }
 /* harmony export (immutable) */ __webpack_exports__["c"] = setLibs;
@@ -11032,15 +11049,17 @@ module.exports = function (css) {
 /* 8 */,
 /* 9 */,
 /* 10 */,
-/* 11 */
+/* 11 */,
+/* 12 */,
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(12);
-module.exports = __webpack_require__(13);
+__webpack_require__(14);
+module.exports = __webpack_require__(15);
 
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11052,6 +11071,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 let filmId;
 __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).ready(()=>{
+    __WEBPACK_IMPORTED_MODULE_1__templates_pageTemplate__["c" /* setLibs */](['fontAwsome'])
     __WEBPACK_IMPORTED_MODULE_1__templates_pageTemplate__["b" /* setHeader */]();
     __WEBPACK_IMPORTED_MODULE_1__templates_pageTemplate__["a" /* setFooter */]();
     writePage();
@@ -11063,7 +11083,10 @@ __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).ready(()=>{
             room:parseInt(__WEBPACK_IMPORTED_MODULE_0_jquery___default()(e.currentTarget).prev().text())
         }
         localStorage.setItem('selectedFilm',JSON.stringify(aux));
-        window.location = window.location.href.replace('filmDetail','cinemaRoom');
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<span class="spinner"><i class="fas fa-spinner fa-pulse"></i></span>').appendTo('body');
+        setTimeout(()=>{
+            window.location = window.location.href.replace('filmDetail','cinemaRoom');
+        },2000)
     });
 });
 /** 
@@ -11108,13 +11131,13 @@ const getTimeTable = () =>{
 }
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(14);
+var content = __webpack_require__(16);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -11139,15 +11162,15 @@ if(false) {
 }
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(false);
 // imports
-
+exports.push([module.i, "@import url(https://fonts.googleapis.com/css?family=Roboto);", ""]);
 
 // module
-exports.push([module.i, "* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box; }\n\nhtml, body {\n  width: 100%;\n  height: 100%; }\n\nsection {\n  display: flex;\n  padding: 1%; }\n  section aside {\n    padding: 1%; }\n  section .description h3 {\n    padding: 1% 0;\n    border-bottom: thin solid;\n    margin-bottom: 1%; }\n  section .description iframe {\n    width: 100%; }\n  section .timeTable {\n    flex-basis: 100%; }\n    section .timeTable div {\n      display: flex; }\n      section .timeTable div span {\n        flex-basis: 33.33333%;\n        padding: .75%;\n        text-align: center; }\n      section .timeTable div:nth-child(2n+2) {\n        background-color: red; }\n      section .timeTable div .btnFindChair {\n        background-color: blue;\n        cursor: pointer; }\n", ""]);
+exports.push([module.i, "* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n  font-family: 'Roboto',sans-serif; }\n\nhtml, body {\n  width: 100%;\n  height: 100%; }\n\nheader {\n  background-color: #2c2b2b;\n  color: whitesmoke;\n  padding: 2%;\n  display: flex;\n  justify-content: space-between; }\n  header h1 {\n    cursor: pointer; }\n  header .social {\n    flex-grow: 1;\n    display: flex;\n    justify-content: flex-end; }\n    header .social span {\n      font-size: 2em;\n      color: whitesmoke;\n      margin: 0 .5%;\n      cursor: pointer; }\n      header .social span:nth-child(1) :hover {\n        color: #3B5998; }\n      header .social span:nth-child(2) :hover {\n        color: #1DA1F2; }\n      header .social span:nth-child(3) :hover {\n        color: #CC3D2C; }\n\nfooter {\n  background-color: #2c2b2b;\n  color: whitesmoke;\n  padding: 2%;\n  display: flex;\n  justify-content: space-between; }\n  footer svg {\n    display: block; }\n  footer .date {\n    display: flex;\n    align-items: center; }\n  footer #licencia span {\n    font-size: .5em; }\n\n.spinner {\n  position: fixed;\n  font-size: 5rem;\n  top: 50%;\n  left: 50%; }\n\nsection {\n  display: flex;\n  padding: 1%; }\n  section aside {\n    padding: 1%; }\n  section .description h3 {\n    padding: 1% 0;\n    border-bottom: thin solid;\n    margin-bottom: 1%; }\n  section .description iframe {\n    width: 100%; }\n  section .timeTable {\n    flex-basis: 100%; }\n    section .timeTable::before {\n      content: 'Horarios';\n      font-size: 1.5em;\n      padding: 4% 1%; }\n    section .timeTable div {\n      display: flex; }\n      section .timeTable div span {\n        border: thin solid;\n        flex-basis: 33.33333%;\n        padding: .75%;\n        text-align: center; }\n      section .timeTable div:nth-child(n+2):hover {\n        background-color: tomato; }\n      section .timeTable div .btnFindChair {\n        background-color: steelblue;\n        cursor: pointer; }\n  section .title {\n    font-weight: bold;\n    font-size: 1.2em; }\n", ""]);
 
 // exports
 

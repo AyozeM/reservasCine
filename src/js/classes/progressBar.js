@@ -11,6 +11,9 @@ class progressBar{
     }
     bar(){
         const wrapper = $('<nav>',{class:'bar'});
+        $('<div>').append(
+            $(`<span>Escoge tu sitio</span>`)
+        ).appendTo(wrapper);
         this.steps.map(e=>{
             $('<div>').append(
                 $(`<span>${e.name}</span>`)
@@ -20,7 +23,7 @@ class progressBar{
     }
     changeStep(){
         $('.bar').find('.actual').removeClass('actual');
-        $($('.bar').children()[this.index]).addClass('actual');
+        $($('.bar').children()[this.index+1]).addClass('actual');
     }
     draw(data = null){
         this.clear();
@@ -29,8 +32,16 @@ class progressBar{
         this.changeStep();
     }
     next(data = null){
+        let devuelto;
         this.index++;
-        this.draw(data);
+        if(this.index < this.steps.length){
+            this.draw(data);
+            devuelto = true;
+        }else{
+            this.index--;
+            devuelto = false;
+        }
+        return devuelto;
     }
     prev(data = null){
         this.index--;

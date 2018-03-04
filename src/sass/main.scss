@@ -2,7 +2,7 @@
 $medidaPeli:200px;
 $medidaPeliMovil:100%;
 body{
-    background-color:steelblue;
+    background-color:$backgroundColor;
     position: relative;
 }
 section{
@@ -45,11 +45,4 @@ section{
         }
     }
 
-}
-
-.spinner{
-    position: fixed;
-    font-size: 5rem;
-    top: 50%;
-    left: 50%;
 }

@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "dist/js/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -10445,14 +10445,15 @@ return jQuery;
 /** 
  * DB con las librerias necesarias
 */
-const libs  = {
-    fontAwsome:`<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>`
+const _libs  = {
+    fontAwsome:`<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>`,
+    toastr:`<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">`
 }
 /** 
  * Crea el pie de pagina
 */
 const setFooter = () =>{
-    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<span>Ayoze Martin Hdez - 2018</span>').appendTo('footer');
+    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<span class="date">Ayoze Martin Hdez - 2018</span>').appendTo('footer');
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = setFooter;
 
@@ -10460,7 +10461,23 @@ const setFooter = () =>{
  * Crea la cabecera
 */
 const setHeader = () => {
-    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<h1>Cines Orotava</h1>').appendTo('header');
+
+    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<h1>Cines Orotava</h1>').click(e=>{
+        window.location = '/dist/';
+    }).appendTo('header');    
+    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<div>',{class:'social'}).append(
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<span>').append(
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<i class="fab fa-facebook-square"></i>')
+        )
+    ).append(
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<span>').append(
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<i class="fab fa-twitter-square"></i>')
+        )
+    ).append(
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<span>').append(
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<i class="fab fa-google-plus-square"></i>')
+        )
+    ).appendTo('header');
 }
 /* harmony export (immutable) */ __webpack_exports__["b"] = setHeader;
 
@@ -10468,9 +10485,9 @@ const setHeader = () => {
  * Importa las librerias necesarias
  * @param {array} libs lista con los nombres de las librerias necesarias
  */
-const setLibs = (libs) =>{
+const setLibs = libs =>{
     libs.map(e=>{
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(libs[e]).appendTo('head');
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(_libs[e]).appendTo('head');
     })
 }
 /* harmony export (immutable) */ __webpack_exports__["c"] = setLibs;
@@ -11026,15 +11043,17 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 5 */
+/* 5 */,
+/* 6 */,
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(6);
-module.exports = __webpack_require__(9);
+__webpack_require__(8);
+module.exports = __webpack_require__(11);
 
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11074,36 +11093,36 @@ const writeFilms = () =>{
 const getData = () =>{
     cinema = JSON.parse(localStorage.getItem("cinema"));
     if(cinema == null){
-        cinema = __webpack_require__(7);
+        cinema = __webpack_require__(9);
         localStorage.setItem("cinema",JSON.stringify(cinema));
     }
     films = JSON.parse(localStorage.getItem("films"));
     if(films == null){
-        films = __webpack_require__(8);
+        films = __webpack_require__(10);
         localStorage.setItem("films",JSON.stringify(films));
     }
 }
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, exports) {
 
-module.exports = {"rooms":[{"actualFilm":"","timeTable":[{"hour":"10:00","film":"marte"},{"hour":"11:00","film":"ff8"},{"hour":"12:00","film":"PCVenganzaSalazar"},{"hour":"13:00","film":"loboWallStreet"},{"hour":"16:00","film":"titanic"},{"hour":"17:00","film":"ff8"},{"hour":"18:00","film":"marte"},{"hour":"19:00","film":"americanPlayboy"},{"hour":"20:00","film":"loboWallStreet"},{"hour":"21:00","film":"PCVenganzaSalazar"},{"hour":"22:00","film":"sexTape"},{"hour":"23:00","film":"fiestaSalchichas"},{"hour":"00:00","film":"interstellar"},{"hour":"01:00","film":"taxi3"}],"chairs":{"rows":5,"columns":10,"selectedChairs":[{"hour":"18:00","film":"marte","boughtChairs":[{"row":1,"column":1}]}]}}]}
+module.exports = {"rooms":[{"actualFilm":"","timeTable":[{"hour":"10:00","film":"marte"},{"hour":"11:00","film":"ff8"},{"hour":"12:00","film":"PCVenganzaSalazar"},{"hour":"13:00","film":"loboWallStreet"},{"hour":"16:00","film":"titanic"},{"hour":"17:00","film":"ff8"},{"hour":"18:00","film":"marte"},{"hour":"19:00","film":"americanPlayboy"},{"hour":"20:00","film":"loboWallStreet"},{"hour":"21:00","film":"PCVenganzaSalazar"},{"hour":"22:00","film":"sexTape"},{"hour":"23:00","film":"fiestaSalchichas"},{"hour":"00:00","film":"interstellar"},{"hour":"01:00","film":"taxi3"}],"chairs":{"rows":5,"columns":10,"selectedChairs":[]}}]}
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, exports) {
 
 module.exports = {"results":[{"id":"titanic","name":"Titanic","sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!","poster":"titanic.jpg","trailer":"https://www.youtube.com/embed/kVrqfYjkTdQ","price":7.5},{"id":"ff8","name":"Fast and Furious 8","sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!","poster":"fastAndFurius8.jpg","trailer":"https://www.youtube.com/embed/19uRZ0vVVbA","price":7.5},{"id":"marte","name":"Marte","sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!","poster":"marte.jpg","trailer":"https://www.youtube.com/embed/TYzLCBh_S-I","price":7.5},{"id":"americanPlayboy","name":"American Playboy","sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!","poster":"americanPlayboy.jpg","trailer":"https://www.youtube.com/embed/qcMgjfWcPKg","price":7.5},{"id":"loboWallStreet","name":"El lobo de wall street","sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!","poster":"elLoboDeWallStreet.jpg","trailer":"https://www.youtube.com/embed/DEMZSa0esCU","price":7.5},{"id":"PCVenganzaSalazar","name":"Piratas del caribe: la venganza de salazar","sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!","poster":"PCLvenganzaDeSalazar.jpg","trailer":"https://www.youtube.com/embed/azjsS0wxTA8","price":7.5},{"id":"sexTape","name":"Sex Tape: Algo pasa en la nube","sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!","poster":"sexTapeAlgoPasaEnLaNube.jpg","trailer":"https://www.youtube.com/embed/edENys4Jj8I","price":7.5},{"id":"fiestaSalchichas","name":"La fiesta de las salchichas","sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!","poster":"laFiestaDeLasSalchichas.jpg","trailer":"https://www.youtube.com/embed/F2kP5_GNnTc","price":7.5},{"id":"interstellar","name":"Interstellar","sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!","poster":"interstellar.jpg","trailer":"https://www.youtube.com/embed/hhCtMhk8eHo","price":7.5},{"id":"taxi3","name":"Taxi 3","sinopsis":"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam iusto officiis suscipit aperiam qui aliquam. Officiis harum veniam a possimus aut accusamus, rerum excepturi vero voluptatem sunt ut ipsum adipisci!","poster":"taxi3.jpg","trailer":"https://www.youtube.com/embed/BQ5ybR28o-w","price":7.5}]}
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(10);
+var content = __webpack_require__(12);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -11128,15 +11147,15 @@ if(false) {
 }
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(false);
 // imports
-
+exports.push([module.i, "@import url(https://fonts.googleapis.com/css?family=Roboto);", ""]);
 
 // module
-exports.push([module.i, "* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box; }\n\nhtml, body {\n  width: 100%;\n  height: 100%; }\n\nbody {\n  background-color: steelblue;\n  position: relative; }\n\nsection {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: space-around; }\n\n.smallFilm {\n  display: flex;\n  flex-direction: column;\n  position: relative;\n  margin: 2%;\n  transition: .2s;\n  cursor: pointer; }\n  @media screen and (max-width: 768px) {\n    .smallFilm {\n      flex-direction: row; } }\n  .smallFilm img {\n    width: 200px; }\n    @media screen and (max-width: 768px) {\n      .smallFilm img {\n        height: 400px;\n        width: 100%; } }\n  .smallFilm span {\n    width: 200px;\n    position: absolute;\n    bottom: 0;\n    background-color: black;\n    color: white;\n    padding: 5%; }\n    @media screen and (max-width: 768px) {\n      .smallFilm span {\n        font-size: 2em;\n        width: 100%; } }\n  @media screen and (min-width: 768px) {\n    .smallFilm:hover {\n      transform: scale(1.2); } }\n\n.spinner {\n  position: fixed;\n  font-size: 5rem;\n  top: 50%;\n  left: 50%; }\n", ""]);
+exports.push([module.i, "* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n  font-family: 'Roboto',sans-serif; }\n\nhtml, body {\n  width: 100%;\n  height: 100%; }\n\nheader {\n  background-color: #2c2b2b;\n  color: whitesmoke;\n  padding: 2%;\n  display: flex;\n  justify-content: space-between; }\n  header h1 {\n    cursor: pointer; }\n  header .social {\n    flex-grow: 1;\n    display: flex;\n    justify-content: flex-end; }\n    header .social span {\n      font-size: 2em;\n      color: whitesmoke;\n      margin: 0 .5%;\n      cursor: pointer; }\n      header .social span:nth-child(1) :hover {\n        color: #3B5998; }\n      header .social span:nth-child(2) :hover {\n        color: #1DA1F2; }\n      header .social span:nth-child(3) :hover {\n        color: #CC3D2C; }\n\nfooter {\n  background-color: #2c2b2b;\n  color: whitesmoke;\n  padding: 2%;\n  display: flex;\n  justify-content: space-between; }\n  footer svg {\n    display: block; }\n  footer .date {\n    display: flex;\n    align-items: center; }\n  footer #licencia span {\n    font-size: .5em; }\n\n.spinner {\n  position: fixed;\n  font-size: 5rem;\n  top: 50%;\n  left: 50%; }\n\nbody {\n  background-color: #e0dcdc;\n  position: relative; }\n\nsection {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: space-around; }\n\n.smallFilm {\n  display: flex;\n  flex-direction: column;\n  position: relative;\n  margin: 2%;\n  transition: .2s;\n  cursor: pointer; }\n  @media screen and (max-width: 768px) {\n    .smallFilm {\n      flex-direction: row; } }\n  .smallFilm img {\n    width: 200px; }\n    @media screen and (max-width: 768px) {\n      .smallFilm img {\n        height: 400px;\n        width: 100%; } }\n  .smallFilm span {\n    width: 200px;\n    position: absolute;\n    bottom: 0;\n    background-color: black;\n    color: white;\n    padding: 5%; }\n    @media screen and (max-width: 768px) {\n      .smallFilm span {\n        font-size: 2em;\n        width: 100%; } }\n  @media screen and (min-width: 768px) {\n    .smallFilm:hover {\n      transform: scale(1.2); } }\n", ""]);
 
 // exports
 

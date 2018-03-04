@@ -1,15 +1,55 @@
 import $ from 'jquery';
 import * as template from './templates/pageTemplate';
 import progressBar from './classes/progressBar';
+import toastr from 'toastr';
+
+let filmInfo;
 $(document).ready(()=>{
+    template.setLibs(['fontAwsome','toastr'])
     template.setHeader();
     template.setFooter();
-    let x = new progressBar(parts,$('section'));
-    x.draw(getFilmInfo());
+    filmInfo = getFilmInfo();
+    let progresoCompra = new progressBar(parts,$('section'));
+    progresoCompra.draw(filmInfo);
     $('section').on('click','.btn',e=>{
         e.preventDefault();
-        x.next();
-    })
+        if(!progresoCompra.next()){
+            let emails = $('input[type="email"]');
+            if($('form').is(':valid')){
+                if(emails[0].value != emails[1].value){
+                    toastr.error("no coinciden los emails")
+                }else{
+                    if(saveChairs()){
+                        $('<span class="spinner"><i class="fas fa-spinner fa-pulse"></i></span>').appendTo('body');
+                        setTimeout(()=>{
+                            $('.spinner').remove();
+                            toastr.success("Compra realizada con éxito");
+                        },1000)
+                        setTimeout(()=>{
+                            window.location = window.location.href.replace('html/paimentPage.html','');
+                        },2000);
+                    }
+                }
+            }else{
+                toastr.error("Todos los campos son obligatorios, compruebe su validez")
+            }
+        }
+    });
+    $('section').on('focusout','input',e=>{
+        const tag = $(e.currentTarget);
+        if(!tag.is(':valid') && tag.val().length > 0){
+            tag.siblings('.bar').css('color','tomato');
+            tag.siblings('label').css({
+                top:'-3em',
+                'font-size':'.8em',
+                opacity: '.75'
+            })
+        }else{
+            tag.siblings('.bar').attr('style','');
+            tag.siblings('label').attr('style','');
+        }
+
+    });
 });
 
 const getFilmInfo = () =>{
@@ -19,8 +59,8 @@ const getFilmInfo = () =>{
     let tickets = JSON.parse(localStorage.getItem('reservedChairs'));
     selectedFilm.img = `/dist/img/${aux.poster}`;
     selectedFilm.price = aux.price;
-    selectedFilm.film = aux.name;
-    selectedFilm.tickets = tickets.length;
+    selectedFilm.filmName = aux.name;
+    selectedFilm.tickets = tickets;
     return selectedFilm;
 }
 const parts = [
@@ -28,13 +68,13 @@ const parts = [
         name:'Detalles de la compra',
         method:data =>{
             const classTitles = 'title'
-            return $('<div>',{class:'detailsWrapper'}).append(
+            return $('<div>',{class:'details wrapper'}).append(
                 $('<img>',{src:data.img})
             ).append(
                 $('<div>',{class:'details'}).append(
                     $(`<span class="${classTitles}">Película</span>`)
                 ).append(
-                    $(`<span>${data.film}</span>`)
+                    $(`<span>${data.filmName}</span>`)
                 ).append(
                     $(`<span class="${classTitles}">Hora</span>`)
                 ).append(
@@ -46,16 +86,19 @@ const parts = [
                 ).append(
                     $(`<span class="${classTitles}">Precio Unidad</span>`)
                 ).append(
-                    $(`<span>${data.price}</span>`)
+                    $(`<span>${data.price}€</span>`)
                 ).append(
                     $(`<span class="${classTitles}">Numero de entradas</span>`)
                 ).append(
-                    $(`<span>${data.tickets}</span>`)
+                    $(`<span>${data.tickets.length}</span>`)
+                ).append(
+                    $(`<span class="${classTitles}">Precio total</span>`)
+                ).append(
+                    $(`<span>${(data.tickets.length*data.price)}€</span>`)
                 )
             ).append(
-                $('<div>',{class:'btnBox'}).append(
-                    $(`<a href="#" class="btn">Continuar</a>`)
-                )
+                $(`<a href="#" class="btn">Continuar</a>`)
+                
             )
             
         }
@@ -63,26 +106,59 @@ const parts = [
     {
         name:'Formulario de pago',
         method:() =>
-        $('<div>',{class:'formWrapper'}).append(
+        $('<div>',{class:'form wrapper'}).append(
             $('<form>').append(
-                $('<input>',{type:'email',id:'email'})
+                $('<p>').append(
+                    $('<h1>Rellena tus datos para formalizar la compra</h1>')
+                )
             ).append(
-                $('<label for="email">Escribe tu email</label>')
-            )
-        ).append(
-            $('<p>').append(
-                $('<input>',{type:'email',id:'confirmEmail'})
+                $('<p>').append(
+                    $('<input>',{type:'email',id:'email',required:'required'})
+                ).append(
+                    $('<i>',{class:'bar'})
+                ).append(
+                    $('<label for="email">Escribe tu email</label>')                    
+                )
             ).append(
-                $('<label for="conformEmail">Repite tu email</label>')
-            )
-        ).append(
-            $('<p>').append(
-                $('<input>',{type:'text',id:'creditCard'})
+                $('<p>').append(
+                    $('<input>',{type:'email',id:'confirmEmail',required:'required'})
+                ).append(
+                    $('<i>',{class:'bar'})
+                ).append(
+                    $('<label for="confirmEmail">Repite tu email</label>')                    
+                )
             ).append(
-                $('<label for="creditCard">Tarjeta de credito</label>')
+                $('<p>').append(
+                    $('<input>',{type:'text',id:'creditCard',required:'required',pattern:'^\\d{16,19}$'})
+                ).append(
+                    $('<i>',{class:'bar'})
+                ).append(
+                    $('<label for="creditCard">Tarjeta de credito</label>')                    
+                )
+            ).append(
+                $('<p>').append(
+                    $('<a href="#" class="btn">Confirmar compra</button>')
+                )
             )
-        ).append(
-            $('<a href="#" class="btn">Confirmar compra</button>')
         )
     }
 ]
+
+const saveChairs = () =>{
+    let cinema = JSON.parse(localStorage.getItem('cinema'));
+    let aux = cinema.rooms[filmInfo.room-1].chairs.selectedChairs;
+    let i = aux.findIndex(e=> e.film == filmInfo.film && e.hour == filmInfo.hour);
+
+    i == -1
+    ? 
+    aux.push({
+        film:filmInfo.film,
+        hour:filmInfo.hour,
+        boughtChairs:filmInfo.tickets
+    }) 
+    :aux[i].boughtChairs = aux[i].boughtChairs.concat(filmInfo.tickets)
+    ;
+    
+    localStorage.setItem('cinema',JSON.stringify(cinema))
+    return true;
+}

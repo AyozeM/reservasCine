@@ -18,20 +18,31 @@ section{
     }
     .timeTable{
         flex-basis:100%;
+        &::before{
+            content: 'Horarios';
+            font-size:1.5em;
+            padding: 4% 1%;
+        }
         div{
             display: flex;
             span{
+                border:thin solid;
                 flex-basis: (100%/3);
                 padding:.75%;
                 text-align: center;
+
             }
-            &:nth-child(2n+2){
-                background-color:red;
+            &:nth-child(n+2):hover{
+                background-color:$rojo;
             }
             .btnFindChair{
-                background-color: blue;
+                background-color: $azul;
                 cursor: pointer;
             }
         }
+    }
+    .title{
+        font-weight: bold;
+        font-size:1.2em;
     }
 }

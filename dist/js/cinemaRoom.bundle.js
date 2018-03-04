@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "dist/js/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 15);
+/******/ 	return __webpack_require__(__webpack_require__.s = 17);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -10445,14 +10445,15 @@ return jQuery;
 /** 
  * DB con las librerias necesarias
 */
-const libs  = {
-    fontAwsome:`<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>`
+const _libs  = {
+    fontAwsome:`<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>`,
+    toastr:`<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">`
 }
 /** 
  * Crea el pie de pagina
 */
 const setFooter = () =>{
-    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<span>Ayoze Martin Hdez - 2018</span>').appendTo('footer');
+    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<span class="date">Ayoze Martin Hdez - 2018</span>').appendTo('footer');
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = setFooter;
 
@@ -10460,7 +10461,23 @@ const setFooter = () =>{
  * Crea la cabecera
 */
 const setHeader = () => {
-    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<h1>Cines Orotava</h1>').appendTo('header');
+
+    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<h1>Cines Orotava</h1>').click(e=>{
+        window.location = '/dist/';
+    }).appendTo('header');    
+    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<div>',{class:'social'}).append(
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<span>').append(
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<i class="fab fa-facebook-square"></i>')
+        )
+    ).append(
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<span>').append(
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<i class="fab fa-twitter-square"></i>')
+        )
+    ).append(
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<span>').append(
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<i class="fab fa-google-plus-square"></i>')
+        )
+    ).appendTo('header');
 }
 /* harmony export (immutable) */ __webpack_exports__["b"] = setHeader;
 
@@ -10468,9 +10485,9 @@ const setHeader = () => {
  * Importa las librerias necesarias
  * @param {array} libs lista con los nombres de las librerias necesarias
  */
-const setLibs = (libs) =>{
+const setLibs = libs =>{
     libs.map(e=>{
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(libs[e]).appendTo('head');
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(_libs[e]).appendTo('head');
     })
 }
 /* harmony export (immutable) */ __webpack_exports__["c"] = setLibs;
@@ -11026,8 +11043,492 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 5 */,
-/* 6 */,
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
+ * Toastr
+ * Copyright 2012-2015
+ * Authors: John Papa, Hans Fjällemark, and Tim Ferrell.
+ * All Rights Reserved.
+ * Use, reproduction, distribution, and modification of this code is subject to the terms and
+ * conditions of the MIT license, available at http://www.opensource.org/licenses/mit-license.php
+ *
+ * ARIA Support: Greta Krafsig
+ *
+ * Project: https://github.com/CodeSeven/toastr
+ */
+/* global define */
+(function (define) {
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(0)], __WEBPACK_AMD_DEFINE_RESULT__ = (function ($) {
+        return (function () {
+            var $container;
+            var listener;
+            var toastId = 0;
+            var toastType = {
+                error: 'error',
+                info: 'info',
+                success: 'success',
+                warning: 'warning'
+            };
+
+            var toastr = {
+                clear: clear,
+                remove: remove,
+                error: error,
+                getContainer: getContainer,
+                info: info,
+                options: {},
+                subscribe: subscribe,
+                success: success,
+                version: '2.1.4',
+                warning: warning
+            };
+
+            var previousToast;
+
+            return toastr;
+
+            ////////////////
+
+            function error(message, title, optionsOverride) {
+                return notify({
+                    type: toastType.error,
+                    iconClass: getOptions().iconClasses.error,
+                    message: message,
+                    optionsOverride: optionsOverride,
+                    title: title
+                });
+            }
+
+            function getContainer(options, create) {
+                if (!options) { options = getOptions(); }
+                $container = $('#' + options.containerId);
+                if ($container.length) {
+                    return $container;
+                }
+                if (create) {
+                    $container = createContainer(options);
+                }
+                return $container;
+            }
+
+            function info(message, title, optionsOverride) {
+                return notify({
+                    type: toastType.info,
+                    iconClass: getOptions().iconClasses.info,
+                    message: message,
+                    optionsOverride: optionsOverride,
+                    title: title
+                });
+            }
+
+            function subscribe(callback) {
+                listener = callback;
+            }
+
+            function success(message, title, optionsOverride) {
+                return notify({
+                    type: toastType.success,
+                    iconClass: getOptions().iconClasses.success,
+                    message: message,
+                    optionsOverride: optionsOverride,
+                    title: title
+                });
+            }
+
+            function warning(message, title, optionsOverride) {
+                return notify({
+                    type: toastType.warning,
+                    iconClass: getOptions().iconClasses.warning,
+                    message: message,
+                    optionsOverride: optionsOverride,
+                    title: title
+                });
+            }
+
+            function clear($toastElement, clearOptions) {
+                var options = getOptions();
+                if (!$container) { getContainer(options); }
+                if (!clearToast($toastElement, options, clearOptions)) {
+                    clearContainer(options);
+                }
+            }
+
+            function remove($toastElement) {
+                var options = getOptions();
+                if (!$container) { getContainer(options); }
+                if ($toastElement && $(':focus', $toastElement).length === 0) {
+                    removeToast($toastElement);
+                    return;
+                }
+                if ($container.children().length) {
+                    $container.remove();
+                }
+            }
+
+            // internal functions
+
+            function clearContainer (options) {
+                var toastsToClear = $container.children();
+                for (var i = toastsToClear.length - 1; i >= 0; i--) {
+                    clearToast($(toastsToClear[i]), options);
+                }
+            }
+
+            function clearToast ($toastElement, options, clearOptions) {
+                var force = clearOptions && clearOptions.force ? clearOptions.force : false;
+                if ($toastElement && (force || $(':focus', $toastElement).length === 0)) {
+                    $toastElement[options.hideMethod]({
+                        duration: options.hideDuration,
+                        easing: options.hideEasing,
+                        complete: function () { removeToast($toastElement); }
+                    });
+                    return true;
+                }
+                return false;
+            }
+
+            function createContainer(options) {
+                $container = $('<div/>')
+                    .attr('id', options.containerId)
+                    .addClass(options.positionClass);
+
+                $container.appendTo($(options.target));
+                return $container;
+            }
+
+            function getDefaults() {
+                return {
+                    tapToDismiss: true,
+                    toastClass: 'toast',
+                    containerId: 'toast-container',
+                    debug: false,
+
+                    showMethod: 'fadeIn', //fadeIn, slideDown, and show are built into jQuery
+                    showDuration: 300,
+                    showEasing: 'swing', //swing and linear are built into jQuery
+                    onShown: undefined,
+                    hideMethod: 'fadeOut',
+                    hideDuration: 1000,
+                    hideEasing: 'swing',
+                    onHidden: undefined,
+                    closeMethod: false,
+                    closeDuration: false,
+                    closeEasing: false,
+                    closeOnHover: true,
+
+                    extendedTimeOut: 1000,
+                    iconClasses: {
+                        error: 'toast-error',
+                        info: 'toast-info',
+                        success: 'toast-success',
+                        warning: 'toast-warning'
+                    },
+                    iconClass: 'toast-info',
+                    positionClass: 'toast-top-right',
+                    timeOut: 5000, // Set timeOut and extendedTimeOut to 0 to make it sticky
+                    titleClass: 'toast-title',
+                    messageClass: 'toast-message',
+                    escapeHtml: false,
+                    target: 'body',
+                    closeHtml: '<button type="button">&times;</button>',
+                    closeClass: 'toast-close-button',
+                    newestOnTop: true,
+                    preventDuplicates: false,
+                    progressBar: false,
+                    progressClass: 'toast-progress',
+                    rtl: false
+                };
+            }
+
+            function publish(args) {
+                if (!listener) { return; }
+                listener(args);
+            }
+
+            function notify(map) {
+                var options = getOptions();
+                var iconClass = map.iconClass || options.iconClass;
+
+                if (typeof (map.optionsOverride) !== 'undefined') {
+                    options = $.extend(options, map.optionsOverride);
+                    iconClass = map.optionsOverride.iconClass || iconClass;
+                }
+
+                if (shouldExit(options, map)) { return; }
+
+                toastId++;
+
+                $container = getContainer(options, true);
+
+                var intervalId = null;
+                var $toastElement = $('<div/>');
+                var $titleElement = $('<div/>');
+                var $messageElement = $('<div/>');
+                var $progressElement = $('<div/>');
+                var $closeElement = $(options.closeHtml);
+                var progressBar = {
+                    intervalId: null,
+                    hideEta: null,
+                    maxHideTime: null
+                };
+                var response = {
+                    toastId: toastId,
+                    state: 'visible',
+                    startTime: new Date(),
+                    options: options,
+                    map: map
+                };
+
+                personalizeToast();
+
+                displayToast();
+
+                handleEvents();
+
+                publish(response);
+
+                if (options.debug && console) {
+                    console.log(response);
+                }
+
+                return $toastElement;
+
+                function escapeHtml(source) {
+                    if (source == null) {
+                        source = '';
+                    }
+
+                    return source
+                        .replace(/&/g, '&amp;')
+                        .replace(/"/g, '&quot;')
+                        .replace(/'/g, '&#39;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;');
+                }
+
+                function personalizeToast() {
+                    setIcon();
+                    setTitle();
+                    setMessage();
+                    setCloseButton();
+                    setProgressBar();
+                    setRTL();
+                    setSequence();
+                    setAria();
+                }
+
+                function setAria() {
+                    var ariaValue = '';
+                    switch (map.iconClass) {
+                        case 'toast-success':
+                        case 'toast-info':
+                            ariaValue =  'polite';
+                            break;
+                        default:
+                            ariaValue = 'assertive';
+                    }
+                    $toastElement.attr('aria-live', ariaValue);
+                }
+
+                function handleEvents() {
+                    if (options.closeOnHover) {
+                        $toastElement.hover(stickAround, delayedHideToast);
+                    }
+
+                    if (!options.onclick && options.tapToDismiss) {
+                        $toastElement.click(hideToast);
+                    }
+
+                    if (options.closeButton && $closeElement) {
+                        $closeElement.click(function (event) {
+                            if (event.stopPropagation) {
+                                event.stopPropagation();
+                            } else if (event.cancelBubble !== undefined && event.cancelBubble !== true) {
+                                event.cancelBubble = true;
+                            }
+
+                            if (options.onCloseClick) {
+                                options.onCloseClick(event);
+                            }
+
+                            hideToast(true);
+                        });
+                    }
+
+                    if (options.onclick) {
+                        $toastElement.click(function (event) {
+                            options.onclick(event);
+                            hideToast();
+                        });
+                    }
+                }
+
+                function displayToast() {
+                    $toastElement.hide();
+
+                    $toastElement[options.showMethod](
+                        {duration: options.showDuration, easing: options.showEasing, complete: options.onShown}
+                    );
+
+                    if (options.timeOut > 0) {
+                        intervalId = setTimeout(hideToast, options.timeOut);
+                        progressBar.maxHideTime = parseFloat(options.timeOut);
+                        progressBar.hideEta = new Date().getTime() + progressBar.maxHideTime;
+                        if (options.progressBar) {
+                            progressBar.intervalId = setInterval(updateProgress, 10);
+                        }
+                    }
+                }
+
+                function setIcon() {
+                    if (map.iconClass) {
+                        $toastElement.addClass(options.toastClass).addClass(iconClass);
+                    }
+                }
+
+                function setSequence() {
+                    if (options.newestOnTop) {
+                        $container.prepend($toastElement);
+                    } else {
+                        $container.append($toastElement);
+                    }
+                }
+
+                function setTitle() {
+                    if (map.title) {
+                        var suffix = map.title;
+                        if (options.escapeHtml) {
+                            suffix = escapeHtml(map.title);
+                        }
+                        $titleElement.append(suffix).addClass(options.titleClass);
+                        $toastElement.append($titleElement);
+                    }
+                }
+
+                function setMessage() {
+                    if (map.message) {
+                        var suffix = map.message;
+                        if (options.escapeHtml) {
+                            suffix = escapeHtml(map.message);
+                        }
+                        $messageElement.append(suffix).addClass(options.messageClass);
+                        $toastElement.append($messageElement);
+                    }
+                }
+
+                function setCloseButton() {
+                    if (options.closeButton) {
+                        $closeElement.addClass(options.closeClass).attr('role', 'button');
+                        $toastElement.prepend($closeElement);
+                    }
+                }
+
+                function setProgressBar() {
+                    if (options.progressBar) {
+                        $progressElement.addClass(options.progressClass);
+                        $toastElement.prepend($progressElement);
+                    }
+                }
+
+                function setRTL() {
+                    if (options.rtl) {
+                        $toastElement.addClass('rtl');
+                    }
+                }
+
+                function shouldExit(options, map) {
+                    if (options.preventDuplicates) {
+                        if (map.message === previousToast) {
+                            return true;
+                        } else {
+                            previousToast = map.message;
+                        }
+                    }
+                    return false;
+                }
+
+                function hideToast(override) {
+                    var method = override && options.closeMethod !== false ? options.closeMethod : options.hideMethod;
+                    var duration = override && options.closeDuration !== false ?
+                        options.closeDuration : options.hideDuration;
+                    var easing = override && options.closeEasing !== false ? options.closeEasing : options.hideEasing;
+                    if ($(':focus', $toastElement).length && !override) {
+                        return;
+                    }
+                    clearTimeout(progressBar.intervalId);
+                    return $toastElement[method]({
+                        duration: duration,
+                        easing: easing,
+                        complete: function () {
+                            removeToast($toastElement);
+                            clearTimeout(intervalId);
+                            if (options.onHidden && response.state !== 'hidden') {
+                                options.onHidden();
+                            }
+                            response.state = 'hidden';
+                            response.endTime = new Date();
+                            publish(response);
+                        }
+                    });
+                }
+
+                function delayedHideToast() {
+                    if (options.timeOut > 0 || options.extendedTimeOut > 0) {
+                        intervalId = setTimeout(hideToast, options.extendedTimeOut);
+                        progressBar.maxHideTime = parseFloat(options.extendedTimeOut);
+                        progressBar.hideEta = new Date().getTime() + progressBar.maxHideTime;
+                    }
+                }
+
+                function stickAround() {
+                    clearTimeout(intervalId);
+                    progressBar.hideEta = 0;
+                    $toastElement.stop(true, true)[options.showMethod](
+                        {duration: options.showDuration, easing: options.showEasing}
+                    );
+                }
+
+                function updateProgress() {
+                    var percentage = ((progressBar.hideEta - (new Date().getTime())) / progressBar.maxHideTime) * 100;
+                    $progressElement.width(percentage + '%');
+                }
+            }
+
+            function getOptions() {
+                return $.extend({}, getDefaults(), toastr.options);
+            }
+
+            function removeToast($toastElement) {
+                if (!$container) { $container = getContainer(); }
+                if ($toastElement.is(':visible')) {
+                    return;
+                }
+                $toastElement.remove();
+                $toastElement = null;
+                if ($container.children().length === 0) {
+                    $container.remove();
+                    previousToast = undefined;
+                }
+            }
+
+        })();
+    }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+}(__webpack_require__(6)));
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
+
+module.exports = function() {
+	throw new Error("define cannot be used indirect");
+};
+
+
+/***/ }),
 /* 7 */,
 /* 8 */,
 /* 9 */,
@@ -11036,15 +11537,17 @@ module.exports = function (css) {
 /* 12 */,
 /* 13 */,
 /* 14 */,
-/* 15 */
+/* 15 */,
+/* 16 */,
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(16);
-module.exports = __webpack_require__(18);
+__webpack_require__(18);
+module.exports = __webpack_require__(20);
 
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11052,31 +11555,89 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__templates_pageTemplate__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__classes_chair__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__classes_chair__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_toastr__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_toastr__);
+
 
 
 
 let selectedChairs = [];
+const zoomSpeed = 25;
 __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).ready(()=>{
+    __WEBPACK_IMPORTED_MODULE_1__templates_pageTemplate__["c" /* setLibs */](['toastr','fontAwsome']);
     __WEBPACK_IMPORTED_MODULE_1__templates_pageTemplate__["b" /* setHeader */]();
     __WEBPACK_IMPORTED_MODULE_1__templates_pageTemplate__["a" /* setFooter */]();
     __WEBPACK_IMPORTED_MODULE_0_jquery___default()('use').click(e=>{
         const tag = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e.currentTarget);
-        tag.hasClass('ocupado')?alert('asiento ocupado'):
+        tag.hasClass('ocupado')?__WEBPACK_IMPORTED_MODULE_3_toastr___default.a.error('asiento ocupado'):
         tag.toggleClass('escogido');
+    });
+    let auxTooltip;
+    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('use').hover(e=>{
+        const tag = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e.currentTarget);
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<p class="tooltip" style="top:${e.pageY-50}px; left:${e.pageX-30}px">Fila ${tag.closest('g').data('row')} columna ${tag.data('column')}</p>`).appendTo(__WEBPACK_IMPORTED_MODULE_0_jquery___default()('body'));
+    },e=>{
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.tooltip').remove();
     })
     __WEBPACK_IMPORTED_MODULE_0_jquery___default()('#reserve').click(e=>{
         e.preventDefault();
-        let x = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.escogido');
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.escogido').each(function(i){
-            selectedChairs.push({
-                row:__WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).closest('g').data('row'),
-                column:__WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).data('column')
+        let seleccionadas = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.escogido').length
+        if(seleccionadas > 0){
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.escogido').each(function(i){
+                selectedChairs.push({
+                    row:__WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).closest('g').data('row'),
+                    column:__WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).data('column')
+                });
             });
-        });
-        localStorage.setItem('reservedChairs',JSON.stringify(selectedChairs));
-
-        window.location = window.location.href.replace('cinemaRoom','paimentPage');
+            localStorage.setItem('reservedChairs',JSON.stringify(selectedChairs));
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<span class="spinner"><i class="fas fa-spinner fa-pulse"></i></span>').appendTo('body');
+            setTimeout(()=>{
+                window.location = window.location.href.replace('cinemaRoom','paimentPage');
+            },2000)
+        }else{
+            __WEBPACK_IMPORTED_MODULE_3_toastr___default.a.error("Debes seleccionar al menos un asiento");
+        }
+    });
+    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.controls').find('a').click(e=>{
+       e.preventDefault();
+       let tag = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('#canvas');
+       let coordinates = tag.attr('viewBox').split(' ').map(e => parseInt(e));
+       switch(e.currentTarget.id){
+        case 'more':
+            if(coordinates[2] > 400){
+                coordinates[2]-=zoomSpeed;
+                coordinates[3]-=zoomSpeed;
+            }
+            break;
+        case 'less':
+            if(coordinates[2] < 600){
+                coordinates[2]+=zoomSpeed;
+                coordinates[3]+=zoomSpeed;
+            }
+            break;
+        case 'right':
+            if(coordinates[0] < zoomSpeed * ((600 - coordinates[2]) / zoomSpeed)){
+                coordinates[0]+=zoomSpeed;
+            } 
+            break;
+        case 'left':
+            if(coordinates[0] > 0){
+                coordinates[0]-=zoomSpeed;
+            } 
+            break;
+        case 'down':
+            if(coordinates[1] < zoomSpeed * ((600 - coordinates[2]) / zoomSpeed)){
+                coordinates[1]+=zoomSpeed;
+            } 
+            break;
+        case 'up':
+            if(coordinates[1] > 0){
+                coordinates[1]-=zoomSpeed;
+            } 
+            break;
+       }
+        tag.attr('viewBox',coordinates.toString().replace(/,/g,' '));
     });
     getRoomInfo();
 });
@@ -11084,17 +11645,19 @@ __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).ready(()=>{
 const getRoomInfo = () =>{
     let cinema = JSON.parse(localStorage.getItem('cinema'));
     let roomInfo = JSON.parse(localStorage.getItem('selectedFilm'))
-    setBoughtChairs(cinema.rooms[roomInfo.room-1].chairs.selectedChairs.find(e=>e.hour==roomInfo.hour&&e.film==roomInfo.film).boughtChairs);
+    setBoughtChairs(cinema.rooms[roomInfo.room-1].chairs.selectedChairs.find(e=>e.hour==roomInfo.hour&&e.film==roomInfo.film));
 }
 
-const setBoughtChairs = boughtChairs =>{
-    boughtChairs.map(e=>{
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document.querySelector('.chairs').children[e.row-1].children[e.column-1]).addClass('ocupado');
-    });
+const setBoughtChairs = selectedChairs =>{
+    if(selectedChairs != undefined){
+        selectedChairs.boughtChairs.map(e=>{
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document.querySelector('.chairs').children[e.row-1].children[e.column-1]).addClass('ocupado');
+        });
+    }
 }
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11146,13 +11709,13 @@ class chair{
 /* unused harmony default export */ var _unused_webpack_default_export = (chair);
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(19);
+var content = __webpack_require__(21);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -11177,15 +11740,15 @@ if(false) {
 }
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(false);
 // imports
-
+exports.push([module.i, "@import url(https://fonts.googleapis.com/css?family=Roboto);", ""]);
 
 // module
-exports.push([module.i, "* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box; }\n\nhtml, body {\n  width: 100%;\n  height: 100%; }\n\nsvg {\n  border: thin solid; }\n\nsection {\n  display: flex;\n  justify-content: center; }\n\n#screen {\n  fill: lightblue; }\n\n.pasillo {\n  fill: red; }\n\n.salida {\n  fill: blue; }\n\nuse {\n  cursor: pointer; }\n\n.ocupado {\n  fill: red !important; }\n\n.escogido {\n  fill: green !important; }\n\n.free {\n  fill: lightblue; }\n", ""]);
+exports.push([module.i, "* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n  font-family: 'Roboto',sans-serif; }\n\nhtml, body {\n  width: 100%;\n  height: 100%; }\n\nheader {\n  background-color: #2c2b2b;\n  color: whitesmoke;\n  padding: 2%;\n  display: flex;\n  justify-content: space-between; }\n  header h1 {\n    cursor: pointer; }\n  header .social {\n    flex-grow: 1;\n    display: flex;\n    justify-content: flex-end; }\n    header .social span {\n      font-size: 2em;\n      color: whitesmoke;\n      margin: 0 .5%;\n      cursor: pointer; }\n      header .social span:nth-child(1) :hover {\n        color: #3B5998; }\n      header .social span:nth-child(2) :hover {\n        color: #1DA1F2; }\n      header .social span:nth-child(3) :hover {\n        color: #CC3D2C; }\n\nfooter {\n  background-color: #2c2b2b;\n  color: whitesmoke;\n  padding: 2%;\n  display: flex;\n  justify-content: space-between; }\n  footer svg {\n    display: block; }\n  footer .date {\n    display: flex;\n    align-items: center; }\n  footer #licencia span {\n    font-size: .5em; }\n\n.spinner {\n  position: fixed;\n  font-size: 5rem;\n  top: 50%;\n  left: 50%; }\n\n#canvas {\n  border: thin solid; }\n\nsection {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: center; }\n\n#screen {\n  fill: lightblue; }\n\n.pasillo {\n  fill: #a09f9f; }\n\n.salida {\n  fill: blue; }\n\nuse {\n  cursor: pointer;\n  transition: .2s; }\n\n.ocupado {\n  fill: tomato !important; }\n\n.escogido {\n  fill: limegreen !important; }\n\n.free {\n  fill: steelblue; }\n\n.controls {\n  flex-basis: 100%;\n  display: flex;\n  justify-content: space-around; }\n  .controls a {\n    font-size: 1.5em;\n    text-decoration: none;\n    border-radius: 50%; }\n    .controls a:nth-child(n) {\n      color: limegreen; }\n    .controls a:nth-child(n+3) {\n      color: steelblue; }\n    .controls a:nth-child(n+5) {\n      color: tomato; }\n\n.tooltip {\n  position: absolute;\n  border: thin solid;\n  background-color: whitesmoke;\n  padding: .5%; }\n\n.bar {\n  flex-basis: 100%;\n  background-color: tomato;\n  display: flex; }\n  .bar div {\n    flex-grow: 1;\n    text-align: center;\n    padding: 2% 1%;\n    border-left: thin solid; }\n  .bar .actual {\n    background-color: steelblue; }\n\nsection {\n  position: relative; }\n  section > a {\n    text-decoration: none;\n    color: black;\n    background-color: #2c2b2b;\n    height: 0%;\n    padding: 2%;\n    margin-left: 2%;\n    margin-top: 2%;\n    color: whitesmoke; }\n", ""]);
 
 // exports
 

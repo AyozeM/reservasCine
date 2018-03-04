@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "dist/js/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 20);
+/******/ 	return __webpack_require__(__webpack_require__.s = 22);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -10445,14 +10445,15 @@ return jQuery;
 /** 
  * DB con las librerias necesarias
 */
-const libs  = {
-    fontAwsome:`<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>`
+const _libs  = {
+    fontAwsome:`<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>`,
+    toastr:`<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">`
 }
 /** 
  * Crea el pie de pagina
 */
 const setFooter = () =>{
-    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<span>Ayoze Martin Hdez - 2018</span>').appendTo('footer');
+    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<span class="date">Ayoze Martin Hdez - 2018</span>').appendTo('footer');
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = setFooter;
 
@@ -10460,7 +10461,23 @@ const setFooter = () =>{
  * Crea la cabecera
 */
 const setHeader = () => {
-    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<h1>Cines Orotava</h1>').appendTo('header');
+
+    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<h1>Cines Orotava</h1>').click(e=>{
+        window.location = '/dist/';
+    }).appendTo('header');    
+    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<div>',{class:'social'}).append(
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<span>').append(
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<i class="fab fa-facebook-square"></i>')
+        )
+    ).append(
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<span>').append(
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<i class="fab fa-twitter-square"></i>')
+        )
+    ).append(
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<span>').append(
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<i class="fab fa-google-plus-square"></i>')
+        )
+    ).appendTo('header');
 }
 /* harmony export (immutable) */ __webpack_exports__["b"] = setHeader;
 
@@ -10468,9 +10485,9 @@ const setHeader = () => {
  * Importa las librerias necesarias
  * @param {array} libs lista con los nombres de las librerias necesarias
  */
-const setLibs = (libs) =>{
+const setLibs = libs =>{
     libs.map(e=>{
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(libs[e]).appendTo('head');
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(_libs[e]).appendTo('head');
     })
 }
 /* harmony export (immutable) */ __webpack_exports__["c"] = setLibs;
@@ -11026,8 +11043,492 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 5 */,
-/* 6 */,
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
+ * Toastr
+ * Copyright 2012-2015
+ * Authors: John Papa, Hans Fjällemark, and Tim Ferrell.
+ * All Rights Reserved.
+ * Use, reproduction, distribution, and modification of this code is subject to the terms and
+ * conditions of the MIT license, available at http://www.opensource.org/licenses/mit-license.php
+ *
+ * ARIA Support: Greta Krafsig
+ *
+ * Project: https://github.com/CodeSeven/toastr
+ */
+/* global define */
+(function (define) {
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(0)], __WEBPACK_AMD_DEFINE_RESULT__ = (function ($) {
+        return (function () {
+            var $container;
+            var listener;
+            var toastId = 0;
+            var toastType = {
+                error: 'error',
+                info: 'info',
+                success: 'success',
+                warning: 'warning'
+            };
+
+            var toastr = {
+                clear: clear,
+                remove: remove,
+                error: error,
+                getContainer: getContainer,
+                info: info,
+                options: {},
+                subscribe: subscribe,
+                success: success,
+                version: '2.1.4',
+                warning: warning
+            };
+
+            var previousToast;
+
+            return toastr;
+
+            ////////////////
+
+            function error(message, title, optionsOverride) {
+                return notify({
+                    type: toastType.error,
+                    iconClass: getOptions().iconClasses.error,
+                    message: message,
+                    optionsOverride: optionsOverride,
+                    title: title
+                });
+            }
+
+            function getContainer(options, create) {
+                if (!options) { options = getOptions(); }
+                $container = $('#' + options.containerId);
+                if ($container.length) {
+                    return $container;
+                }
+                if (create) {
+                    $container = createContainer(options);
+                }
+                return $container;
+            }
+
+            function info(message, title, optionsOverride) {
+                return notify({
+                    type: toastType.info,
+                    iconClass: getOptions().iconClasses.info,
+                    message: message,
+                    optionsOverride: optionsOverride,
+                    title: title
+                });
+            }
+
+            function subscribe(callback) {
+                listener = callback;
+            }
+
+            function success(message, title, optionsOverride) {
+                return notify({
+                    type: toastType.success,
+                    iconClass: getOptions().iconClasses.success,
+                    message: message,
+                    optionsOverride: optionsOverride,
+                    title: title
+                });
+            }
+
+            function warning(message, title, optionsOverride) {
+                return notify({
+                    type: toastType.warning,
+                    iconClass: getOptions().iconClasses.warning,
+                    message: message,
+                    optionsOverride: optionsOverride,
+                    title: title
+                });
+            }
+
+            function clear($toastElement, clearOptions) {
+                var options = getOptions();
+                if (!$container) { getContainer(options); }
+                if (!clearToast($toastElement, options, clearOptions)) {
+                    clearContainer(options);
+                }
+            }
+
+            function remove($toastElement) {
+                var options = getOptions();
+                if (!$container) { getContainer(options); }
+                if ($toastElement && $(':focus', $toastElement).length === 0) {
+                    removeToast($toastElement);
+                    return;
+                }
+                if ($container.children().length) {
+                    $container.remove();
+                }
+            }
+
+            // internal functions
+
+            function clearContainer (options) {
+                var toastsToClear = $container.children();
+                for (var i = toastsToClear.length - 1; i >= 0; i--) {
+                    clearToast($(toastsToClear[i]), options);
+                }
+            }
+
+            function clearToast ($toastElement, options, clearOptions) {
+                var force = clearOptions && clearOptions.force ? clearOptions.force : false;
+                if ($toastElement && (force || $(':focus', $toastElement).length === 0)) {
+                    $toastElement[options.hideMethod]({
+                        duration: options.hideDuration,
+                        easing: options.hideEasing,
+                        complete: function () { removeToast($toastElement); }
+                    });
+                    return true;
+                }
+                return false;
+            }
+
+            function createContainer(options) {
+                $container = $('<div/>')
+                    .attr('id', options.containerId)
+                    .addClass(options.positionClass);
+
+                $container.appendTo($(options.target));
+                return $container;
+            }
+
+            function getDefaults() {
+                return {
+                    tapToDismiss: true,
+                    toastClass: 'toast',
+                    containerId: 'toast-container',
+                    debug: false,
+
+                    showMethod: 'fadeIn', //fadeIn, slideDown, and show are built into jQuery
+                    showDuration: 300,
+                    showEasing: 'swing', //swing and linear are built into jQuery
+                    onShown: undefined,
+                    hideMethod: 'fadeOut',
+                    hideDuration: 1000,
+                    hideEasing: 'swing',
+                    onHidden: undefined,
+                    closeMethod: false,
+                    closeDuration: false,
+                    closeEasing: false,
+                    closeOnHover: true,
+
+                    extendedTimeOut: 1000,
+                    iconClasses: {
+                        error: 'toast-error',
+                        info: 'toast-info',
+                        success: 'toast-success',
+                        warning: 'toast-warning'
+                    },
+                    iconClass: 'toast-info',
+                    positionClass: 'toast-top-right',
+                    timeOut: 5000, // Set timeOut and extendedTimeOut to 0 to make it sticky
+                    titleClass: 'toast-title',
+                    messageClass: 'toast-message',
+                    escapeHtml: false,
+                    target: 'body',
+                    closeHtml: '<button type="button">&times;</button>',
+                    closeClass: 'toast-close-button',
+                    newestOnTop: true,
+                    preventDuplicates: false,
+                    progressBar: false,
+                    progressClass: 'toast-progress',
+                    rtl: false
+                };
+            }
+
+            function publish(args) {
+                if (!listener) { return; }
+                listener(args);
+            }
+
+            function notify(map) {
+                var options = getOptions();
+                var iconClass = map.iconClass || options.iconClass;
+
+                if (typeof (map.optionsOverride) !== 'undefined') {
+                    options = $.extend(options, map.optionsOverride);
+                    iconClass = map.optionsOverride.iconClass || iconClass;
+                }
+
+                if (shouldExit(options, map)) { return; }
+
+                toastId++;
+
+                $container = getContainer(options, true);
+
+                var intervalId = null;
+                var $toastElement = $('<div/>');
+                var $titleElement = $('<div/>');
+                var $messageElement = $('<div/>');
+                var $progressElement = $('<div/>');
+                var $closeElement = $(options.closeHtml);
+                var progressBar = {
+                    intervalId: null,
+                    hideEta: null,
+                    maxHideTime: null
+                };
+                var response = {
+                    toastId: toastId,
+                    state: 'visible',
+                    startTime: new Date(),
+                    options: options,
+                    map: map
+                };
+
+                personalizeToast();
+
+                displayToast();
+
+                handleEvents();
+
+                publish(response);
+
+                if (options.debug && console) {
+                    console.log(response);
+                }
+
+                return $toastElement;
+
+                function escapeHtml(source) {
+                    if (source == null) {
+                        source = '';
+                    }
+
+                    return source
+                        .replace(/&/g, '&amp;')
+                        .replace(/"/g, '&quot;')
+                        .replace(/'/g, '&#39;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;');
+                }
+
+                function personalizeToast() {
+                    setIcon();
+                    setTitle();
+                    setMessage();
+                    setCloseButton();
+                    setProgressBar();
+                    setRTL();
+                    setSequence();
+                    setAria();
+                }
+
+                function setAria() {
+                    var ariaValue = '';
+                    switch (map.iconClass) {
+                        case 'toast-success':
+                        case 'toast-info':
+                            ariaValue =  'polite';
+                            break;
+                        default:
+                            ariaValue = 'assertive';
+                    }
+                    $toastElement.attr('aria-live', ariaValue);
+                }
+
+                function handleEvents() {
+                    if (options.closeOnHover) {
+                        $toastElement.hover(stickAround, delayedHideToast);
+                    }
+
+                    if (!options.onclick && options.tapToDismiss) {
+                        $toastElement.click(hideToast);
+                    }
+
+                    if (options.closeButton && $closeElement) {
+                        $closeElement.click(function (event) {
+                            if (event.stopPropagation) {
+                                event.stopPropagation();
+                            } else if (event.cancelBubble !== undefined && event.cancelBubble !== true) {
+                                event.cancelBubble = true;
+                            }
+
+                            if (options.onCloseClick) {
+                                options.onCloseClick(event);
+                            }
+
+                            hideToast(true);
+                        });
+                    }
+
+                    if (options.onclick) {
+                        $toastElement.click(function (event) {
+                            options.onclick(event);
+                            hideToast();
+                        });
+                    }
+                }
+
+                function displayToast() {
+                    $toastElement.hide();
+
+                    $toastElement[options.showMethod](
+                        {duration: options.showDuration, easing: options.showEasing, complete: options.onShown}
+                    );
+
+                    if (options.timeOut > 0) {
+                        intervalId = setTimeout(hideToast, options.timeOut);
+                        progressBar.maxHideTime = parseFloat(options.timeOut);
+                        progressBar.hideEta = new Date().getTime() + progressBar.maxHideTime;
+                        if (options.progressBar) {
+                            progressBar.intervalId = setInterval(updateProgress, 10);
+                        }
+                    }
+                }
+
+                function setIcon() {
+                    if (map.iconClass) {
+                        $toastElement.addClass(options.toastClass).addClass(iconClass);
+                    }
+                }
+
+                function setSequence() {
+                    if (options.newestOnTop) {
+                        $container.prepend($toastElement);
+                    } else {
+                        $container.append($toastElement);
+                    }
+                }
+
+                function setTitle() {
+                    if (map.title) {
+                        var suffix = map.title;
+                        if (options.escapeHtml) {
+                            suffix = escapeHtml(map.title);
+                        }
+                        $titleElement.append(suffix).addClass(options.titleClass);
+                        $toastElement.append($titleElement);
+                    }
+                }
+
+                function setMessage() {
+                    if (map.message) {
+                        var suffix = map.message;
+                        if (options.escapeHtml) {
+                            suffix = escapeHtml(map.message);
+                        }
+                        $messageElement.append(suffix).addClass(options.messageClass);
+                        $toastElement.append($messageElement);
+                    }
+                }
+
+                function setCloseButton() {
+                    if (options.closeButton) {
+                        $closeElement.addClass(options.closeClass).attr('role', 'button');
+                        $toastElement.prepend($closeElement);
+                    }
+                }
+
+                function setProgressBar() {
+                    if (options.progressBar) {
+                        $progressElement.addClass(options.progressClass);
+                        $toastElement.prepend($progressElement);
+                    }
+                }
+
+                function setRTL() {
+                    if (options.rtl) {
+                        $toastElement.addClass('rtl');
+                    }
+                }
+
+                function shouldExit(options, map) {
+                    if (options.preventDuplicates) {
+                        if (map.message === previousToast) {
+                            return true;
+                        } else {
+                            previousToast = map.message;
+                        }
+                    }
+                    return false;
+                }
+
+                function hideToast(override) {
+                    var method = override && options.closeMethod !== false ? options.closeMethod : options.hideMethod;
+                    var duration = override && options.closeDuration !== false ?
+                        options.closeDuration : options.hideDuration;
+                    var easing = override && options.closeEasing !== false ? options.closeEasing : options.hideEasing;
+                    if ($(':focus', $toastElement).length && !override) {
+                        return;
+                    }
+                    clearTimeout(progressBar.intervalId);
+                    return $toastElement[method]({
+                        duration: duration,
+                        easing: easing,
+                        complete: function () {
+                            removeToast($toastElement);
+                            clearTimeout(intervalId);
+                            if (options.onHidden && response.state !== 'hidden') {
+                                options.onHidden();
+                            }
+                            response.state = 'hidden';
+                            response.endTime = new Date();
+                            publish(response);
+                        }
+                    });
+                }
+
+                function delayedHideToast() {
+                    if (options.timeOut > 0 || options.extendedTimeOut > 0) {
+                        intervalId = setTimeout(hideToast, options.extendedTimeOut);
+                        progressBar.maxHideTime = parseFloat(options.extendedTimeOut);
+                        progressBar.hideEta = new Date().getTime() + progressBar.maxHideTime;
+                    }
+                }
+
+                function stickAround() {
+                    clearTimeout(intervalId);
+                    progressBar.hideEta = 0;
+                    $toastElement.stop(true, true)[options.showMethod](
+                        {duration: options.showDuration, easing: options.showEasing}
+                    );
+                }
+
+                function updateProgress() {
+                    var percentage = ((progressBar.hideEta - (new Date().getTime())) / progressBar.maxHideTime) * 100;
+                    $progressElement.width(percentage + '%');
+                }
+            }
+
+            function getOptions() {
+                return $.extend({}, getDefaults(), toastr.options);
+            }
+
+            function removeToast($toastElement) {
+                if (!$container) { $container = getContainer(); }
+                if ($toastElement.is(':visible')) {
+                    return;
+                }
+                $toastElement.remove();
+                $toastElement = null;
+                if ($container.children().length === 0) {
+                    $container.remove();
+                    previousToast = undefined;
+                }
+            }
+
+        })();
+    }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+}(__webpack_require__(6)));
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
+
+module.exports = function() {
+	throw new Error("define cannot be used indirect");
+};
+
+
+/***/ }),
 /* 7 */,
 /* 8 */,
 /* 9 */,
@@ -11041,15 +11542,17 @@ module.exports = function (css) {
 /* 17 */,
 /* 18 */,
 /* 19 */,
-/* 20 */
+/* 20 */,
+/* 21 */,
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(21);
-module.exports = __webpack_require__(23);
+__webpack_require__(23);
+module.exports = __webpack_require__(25);
 
 
 /***/ }),
-/* 21 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11057,19 +11560,61 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__templates_pageTemplate__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__classes_progressBar__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__classes_progressBar__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_toastr__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_toastr__);
 
 
 
+
+
+let filmInfo;
 __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).ready(()=>{
+    __WEBPACK_IMPORTED_MODULE_1__templates_pageTemplate__["c" /* setLibs */](['fontAwsome','toastr'])
     __WEBPACK_IMPORTED_MODULE_1__templates_pageTemplate__["b" /* setHeader */]();
     __WEBPACK_IMPORTED_MODULE_1__templates_pageTemplate__["a" /* setFooter */]();
-    let x = new __WEBPACK_IMPORTED_MODULE_2__classes_progressBar__["a" /* default */](parts,__WEBPACK_IMPORTED_MODULE_0_jquery___default()('section'));
-    x.draw(getFilmInfo());
+    filmInfo = getFilmInfo();
+    let progresoCompra = new __WEBPACK_IMPORTED_MODULE_2__classes_progressBar__["a" /* default */](parts,__WEBPACK_IMPORTED_MODULE_0_jquery___default()('section'));
+    progresoCompra.draw(filmInfo);
     __WEBPACK_IMPORTED_MODULE_0_jquery___default()('section').on('click','.btn',e=>{
         e.preventDefault();
-        x.next();
-    })
+        if(!progresoCompra.next()){
+            let emails = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('input[type="email"]');
+            if(__WEBPACK_IMPORTED_MODULE_0_jquery___default()('form').is(':valid')){
+                if(emails[0].value != emails[1].value){
+                    __WEBPACK_IMPORTED_MODULE_3_toastr___default.a.error("no coinciden los emails")
+                }else{
+                    if(saveChairs()){
+                        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<span class="spinner"><i class="fas fa-spinner fa-pulse"></i></span>').appendTo('body');
+                        setTimeout(()=>{
+                            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.spinner').remove();
+                            __WEBPACK_IMPORTED_MODULE_3_toastr___default.a.success("Compra realizada con éxito");
+                        },1000)
+                        setTimeout(()=>{
+                            window.location = window.location.href.replace('html/paimentPage.html','');
+                        },2000);
+                    }
+                }
+            }else{
+                __WEBPACK_IMPORTED_MODULE_3_toastr___default.a.error("Todos los campos son obligatorios, compruebe su validez")
+            }
+        }
+    });
+    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('section').on('focusout','input',e=>{
+        const tag = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e.currentTarget);
+        if(!tag.is(':valid') && tag.val().length > 0){
+            tag.siblings('.bar').css('color','tomato');
+            tag.siblings('label').css({
+                top:'-3em',
+                'font-size':'.8em',
+                opacity: '.75'
+            })
+        }else{
+            tag.siblings('.bar').attr('style','');
+            tag.siblings('label').attr('style','');
+        }
+
+    });
 });
 
 const getFilmInfo = () =>{
@@ -11079,8 +11624,8 @@ const getFilmInfo = () =>{
     let tickets = JSON.parse(localStorage.getItem('reservedChairs'));
     selectedFilm.img = `/dist/img/${aux.poster}`;
     selectedFilm.price = aux.price;
-    selectedFilm.film = aux.name;
-    selectedFilm.tickets = tickets.length;
+    selectedFilm.filmName = aux.name;
+    selectedFilm.tickets = tickets;
     return selectedFilm;
 }
 const parts = [
@@ -11088,13 +11633,13 @@ const parts = [
         name:'Detalles de la compra',
         method:data =>{
             const classTitles = 'title'
-            return __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<div>',{class:'detailsWrapper'}).append(
+            return __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<div>',{class:'details wrapper'}).append(
                 __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<img>',{src:data.img})
             ).append(
                 __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<div>',{class:'details'}).append(
                     __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span class="${classTitles}">Película</span>`)
                 ).append(
-                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span>${data.film}</span>`)
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span>${data.filmName}</span>`)
                 ).append(
                     __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span class="${classTitles}">Hora</span>`)
                 ).append(
@@ -11106,16 +11651,19 @@ const parts = [
                 ).append(
                     __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span class="${classTitles}">Precio Unidad</span>`)
                 ).append(
-                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span>${data.price}</span>`)
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span>${data.price}€</span>`)
                 ).append(
                     __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span class="${classTitles}">Numero de entradas</span>`)
                 ).append(
-                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span>${data.tickets}</span>`)
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span>${data.tickets.length}</span>`)
+                ).append(
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span class="${classTitles}">Precio total</span>`)
+                ).append(
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span>${(data.tickets.length*data.price)}€</span>`)
                 )
             ).append(
-                __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<div>',{class:'btnBox'}).append(
-                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<a href="#" class="btn">Continuar</a>`)
-                )
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<a href="#" class="btn">Continuar</a>`)
+                
             )
             
         }
@@ -11123,32 +11671,65 @@ const parts = [
     {
         name:'Formulario de pago',
         method:() =>
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<div>',{class:'formWrapper'}).append(
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<div>',{class:'form wrapper'}).append(
             __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<form>').append(
-                __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<input>',{type:'email',id:'email'})
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<p>').append(
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<h1>Rellena tus datos para formalizar la compra</h1>')
+                )
             ).append(
-                __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<label for="email">Escribe tu email</label>')
-            )
-        ).append(
-            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<p>').append(
-                __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<input>',{type:'email',id:'confirmEmail'})
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<p>').append(
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<input>',{type:'email',id:'email',required:'required'})
+                ).append(
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<i>',{class:'bar'})
+                ).append(
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<label for="email">Escribe tu email</label>')                    
+                )
             ).append(
-                __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<label for="conformEmail">Repite tu email</label>')
-            )
-        ).append(
-            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<p>').append(
-                __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<input>',{type:'text',id:'creditCard'})
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<p>').append(
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<input>',{type:'email',id:'confirmEmail',required:'required'})
+                ).append(
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<i>',{class:'bar'})
+                ).append(
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<label for="confirmEmail">Repite tu email</label>')                    
+                )
             ).append(
-                __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<label for="creditCard">Tarjeta de credito</label>')
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<p>').append(
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<input>',{type:'text',id:'creditCard',required:'required',pattern:'^\\d{16,19}$'})
+                ).append(
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<i>',{class:'bar'})
+                ).append(
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<label for="creditCard">Tarjeta de credito</label>')                    
+                )
+            ).append(
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<p>').append(
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<a href="#" class="btn">Confirmar compra</button>')
+                )
             )
-        ).append(
-            __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<a href="#" class="btn">Confirmar compra</button>')
         )
     }
 ]
 
+const saveChairs = () =>{
+    let cinema = JSON.parse(localStorage.getItem('cinema'));
+    let aux = cinema.rooms[filmInfo.room-1].chairs.selectedChairs;
+    let i = aux.findIndex(e=> e.film == filmInfo.film && e.hour == filmInfo.hour);
+
+    i == -1
+    ? 
+    aux.push({
+        film:filmInfo.film,
+        hour:filmInfo.hour,
+        boughtChairs:filmInfo.tickets
+    }) 
+    :aux[i].boughtChairs = aux[i].boughtChairs.concat(filmInfo.tickets)
+    ;
+    
+    localStorage.setItem('cinema',JSON.stringify(cinema))
+    return true;
+}
+
 /***/ }),
-/* 22 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11167,6 +11748,9 @@ class progressBar{
     }
     bar(){
         const wrapper = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<nav>',{class:'bar'});
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<div>').append(
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span>Escoge tu sitio</span>`)
+        ).appendTo(wrapper);
         this.steps.map(e=>{
             __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<div>').append(
                 __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<span>${e.name}</span>`)
@@ -11176,7 +11760,7 @@ class progressBar{
     }
     changeStep(){
         __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.bar').find('.actual').removeClass('actual');
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(__WEBPACK_IMPORTED_MODULE_0_jquery___default()('.bar').children()[this.index]).addClass('actual');
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(__WEBPACK_IMPORTED_MODULE_0_jquery___default()('.bar').children()[this.index+1]).addClass('actual');
     }
     draw(data = null){
         this.clear();
@@ -11185,8 +11769,16 @@ class progressBar{
         this.changeStep();
     }
     next(data = null){
+        let devuelto;
         this.index++;
-        this.draw(data);
+        if(this.index < this.steps.length){
+            this.draw(data);
+            devuelto = true;
+        }else{
+            this.index--;
+            devuelto = false;
+        }
+        return devuelto;
     }
     prev(data = null){
         this.index--;
@@ -11196,13 +11788,13 @@ class progressBar{
 /* harmony default export */ __webpack_exports__["a"] = (progressBar);
 
 /***/ }),
-/* 23 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(24);
+var content = __webpack_require__(26);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -11227,15 +11819,15 @@ if(false) {
 }
 
 /***/ }),
-/* 24 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(false);
 // imports
-
+exports.push([module.i, "@import url(https://fonts.googleapis.com/css?family=Roboto);", ""]);
 
 // module
-exports.push([module.i, "* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box; }\n\nhtml, body {\n  width: 100%;\n  height: 100%; }\n", ""]);
+exports.push([module.i, "* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n  font-family: 'Roboto',sans-serif; }\n\nhtml, body {\n  width: 100%;\n  height: 100%; }\n\nheader {\n  background-color: #2c2b2b;\n  color: whitesmoke;\n  padding: 2%;\n  display: flex;\n  justify-content: space-between; }\n  header h1 {\n    cursor: pointer; }\n  header .social {\n    flex-grow: 1;\n    display: flex;\n    justify-content: flex-end; }\n    header .social span {\n      font-size: 2em;\n      color: whitesmoke;\n      margin: 0 .5%;\n      cursor: pointer; }\n      header .social span:nth-child(1) :hover {\n        color: #3B5998; }\n      header .social span:nth-child(2) :hover {\n        color: #1DA1F2; }\n      header .social span:nth-child(3) :hover {\n        color: #CC3D2C; }\n\nfooter {\n  background-color: #2c2b2b;\n  color: whitesmoke;\n  padding: 2%;\n  display: flex;\n  justify-content: space-between; }\n  footer svg {\n    display: block; }\n  footer .date {\n    display: flex;\n    align-items: center; }\n  footer #licencia span {\n    font-size: .5em; }\n\n.spinner {\n  position: fixed;\n  font-size: 5rem;\n  top: 50%;\n  left: 50%; }\n\n.bar {\n  flex-basis: 100%;\n  background-color: tomato;\n  display: flex; }\n  .bar div {\n    flex-grow: 1;\n    text-align: center;\n    padding: 2% 1%;\n    border-left: thin solid; }\n  .bar .actual {\n    background-color: steelblue; }\n\n.wrapper {\n  padding: 1%;\n  display: flex;\n  justify-content: space-between; }\n\n.wrapper.details {\n  display: flex; }\n  .wrapper.details .details {\n    flex-basis: 37.5%;\n    margin-left: 2%;\n    display: grid;\n    grid-template-columns: repeat(2, 1fr); }\n    .wrapper.details .details :nth-child(2n+1) {\n      background-color: #2c2b2b;\n      color: whitesmoke;\n      border-color: black; }\n    .wrapper.details .details .title {\n      font-weight: bold; }\n    .wrapper.details .details span {\n      border: thin solid;\n      display: flex;\n      align-items: center;\n      justify-content: center; }\n\n.wrapper.form {\n  display: flex;\n  justify-content: center; }\n  .wrapper.form form {\n    width: 100%; }\n  .wrapper.form p {\n    width: 50%;\n    margin: 3% 0; }\n    .wrapper.form p .bar {\n      border-bottom: .2em solid;\n      background-color: transparent; }\n    .wrapper.form p input {\n      height: 1.5em;\n      width: 100%;\n      outline: none;\n      border: none; }\n      .wrapper.form p input:focus ~ label, .wrapper.form p input:valid ~ label {\n        top: -3em;\n        font-size: .8em;\n        opacity: .9; }\n      .wrapper.form p input:focus ~ .bar, .wrapper.form p input:valid ~ .bar {\n        border-color: steelblue; }\n      .wrapper.form p input:focus:invalid ~ label {\n        top: -3em;\n        font-size: .8em;\n        opacity: .75; }\n      .wrapper.form p input:focus:invalid ~ .bar {\n        border-color: tomato; }\n    .wrapper.form p label {\n      font-size: 1.3em;\n      position: relative;\n      left: .5em;\n      top: -1.4em;\n      transition: .2s;\n      cursor: text; }\n\n.failed ~ label {\n  top: -3em;\n  font-size: .8em;\n  opacity: .75; }\n\n.failed ~ .bar {\n  border-color: tomato; }\n\n/* body{\r\n    @include incompleto;\r\n} */\n.btn {\n  text-decoration: none;\n  color: black;\n  background-color: #2c2b2b;\n  height: 0%;\n  padding: 2%;\n  margin-left: 2%;\n  margin-top: 2%;\n  color: whitesmoke;\n  margin-top: 0; }\n", ""]);
 
 // exports
 

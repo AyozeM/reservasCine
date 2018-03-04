@@ -1,3 +1,103 @@
 @import './_reset.scss';
 @import './_colors.scss';
 @import './_mediaQueries.scss';
+
+@mixin general{
+    background-color: $mainColor;
+    color:$lightFont;
+    padding: 2%;
+}
+@mixin incompleto{
+    display: flex;
+    flex-direction: column;
+    section{
+        flex-grow: 1;
+    }
+}
+
+@mixin barraProgreso{
+    flex-basis: 100%;
+    background-color: $rojo;
+    display: flex;
+    div{
+        flex-grow: 1;
+        text-align: center;
+        padding: 2% 1%;
+        border-left:thin solid;
+    }
+    .actual{
+        background-color: $azul;
+    }
+}
+
+@mixin btn{
+    text-decoration: none;
+    color:black;
+    background-color: $mainColor;
+    height: 0%;
+    padding: 2%;
+    margin-left: 2%;
+    margin-top:2%;
+    color:$lightFont;
+}
+
+header{
+    @include general;
+    display: flex;
+    justify-content: space-between;
+    h1{
+        cursor: pointer;
+    }
+    .social{
+        flex-grow: 1;
+        display: flex;
+        justify-content: flex-end;
+        
+        span{
+            font-size: 2em;
+            color:$lightFont;
+            margin:0 .5%;
+            cursor: pointer;
+            &:nth-child(1){
+                :hover{
+                    color:#3B5998;
+                }
+            }
+            &:nth-child(2){
+                :hover{
+                    color:#1DA1F2;
+                }
+            }
+            &:nth-child(3){
+                :hover{
+                    color:#CC3D2C;
+                }
+            }
+        }
+    }
+}
+
+footer{
+    @include general;
+    display: flex;
+    justify-content: space-between;
+    svg{
+        display: block;
+    }
+    .date{
+        display: flex;
+        align-items: center;
+    }
+    #licencia{
+        span{
+            font-size: .5em;
+        }
+    }
+}
+
+.spinner{
+    position: fixed;
+    font-size: 5rem;
+    top: 50%;
+    left: 50%;
+}

@@ -2,6 +2,7 @@ import $ from 'jquery';
 import * as template from './templates/pageTemplate';
 let filmId;
 $(document).ready(()=>{
+    template.setLibs(['fontAwsome'])
     template.setHeader();
     template.setFooter();
     writePage();
@@ -13,7 +14,10 @@ $(document).ready(()=>{
             room:parseInt($(e.currentTarget).prev().text())
         }
         localStorage.setItem('selectedFilm',JSON.stringify(aux));
-        window.location = window.location.href.replace('filmDetail','cinemaRoom');
+        $('<span class="spinner"><i class="fas fa-spinner fa-pulse"></i></span>').appendTo('body');
+        setTimeout(()=>{
+            window.location = window.location.href.replace('filmDetail','cinemaRoom');
+        },2000)
     });
 });
 /** 

@@ -72,18 +72,7 @@
             "chairs":{
                 "rows":5,
                 "columns":10,
-                "selectedChairs":[
-                    {
-                        "hour":"18:00",
-                        "film":"marte",
-                        "boughtChairs":[
-                            {
-                                "row":1,
-                                "column":1
-                            }
-                        ]
-                    }
-                ]
+                "selectedChairs":[]
             }
         }
     ]

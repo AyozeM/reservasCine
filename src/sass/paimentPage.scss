@@ -1,1 +1,101 @@
 @import './_general.scss';
+
+.bar{
+    @include barraProgreso;
+}
+.wrapper{
+    padding: 1%;display: flex;
+    justify-content: space-between;
+}
+.wrapper.details{
+    display: flex;
+    .details{
+        flex-basis: 37.5%;
+        margin-left: 2%;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        :nth-child(2n+1){
+            background-color: $mainColor;
+            color:$lightFont;
+            border-color: black;
+        }
+        .title{
+            font-weight: bold;
+        }
+        span{
+            border:thin solid;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+}
+.wrapper.form{
+    //margin-top:5%;
+    display: flex;
+    justify-content: center;
+    form{
+        width:100%;
+    }
+    p{
+        width:50%;
+        margin:3% 0;
+        .bar{
+            border-bottom: .2em solid;
+            background-color: transparent;
+        }
+        input{
+            height: 1.5em;
+            width: 100%;     
+            outline: none;
+            border: none;
+            &:focus,&:valid{
+                & ~ label{
+                    top:-3em;
+                    font-size:.8em;
+                    opacity: .9;
+                }
+                & ~ .bar{
+                    border-color: steelblue;
+                }
+            }
+            &:focus:invalid{
+                & ~ label{
+                    top:-3em;
+                    font-size:.8em;
+                    opacity: .75;
+                }
+                & ~ .bar{
+                    border-color: tomato;
+                }
+            }         
+        }       
+
+        label{
+            font-size: 1.3em;
+            position: relative;
+            left:.5em;
+            top: -1.4em;
+            transition: .2s;
+            cursor: text;
+        }
+    }
+}
+.failed{
+    & ~ label{
+        top:-3em;
+        font-size:.8em;
+        opacity: .75;
+    }
+    & ~ .bar{
+        border-color: tomato;
+    }
+}
+/* body{
+    @include incompleto;
+} */
+
+.btn{
+    @include btn;
+    margin-top:0;
+}

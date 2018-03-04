@@ -1,9 +1,10 @@
 @import './_general.scss';
-svg{
+#canvas{
     border: thin solid;
 }
 section{
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
 }
 #screen{
@@ -11,7 +12,7 @@ section{
 }
 
 .pasillo{
-    fill:red;
+    fill:rgb(160, 159, 159);
 }
 .salida{
     fill:blue;
@@ -19,14 +20,52 @@ section{
 
 use{
     cursor: pointer;
+    transition: .2s;
 }
 
 .ocupado{
-    fill:red !important;
+    fill:$rojo !important;
 }
 .escogido{
-    fill:green !important;
+    fill:$verde !important;
 }
 .free{
-    fill:lightblue;
+    fill:$azul;
+}
+
+.controls{
+    flex-basis: 100%;
+    display: flex;
+    justify-content: space-around;
+    a{
+        font-size: 1.5em;
+        text-decoration: none;
+        border-radius: 50%;
+        &:nth-child(n){
+            color:$verde;
+        }
+        &:nth-child(n+3){
+            color:$azul;
+        }
+        &:nth-child(n+5){
+            color:$rojo;
+        }
+    }
+}
+
+.tooltip{
+    position: absolute;
+    border:thin solid;
+    background-color: whitesmoke;
+    padding: .5%;
+}
+
+.bar{
+    @include barraProgreso;
+}
+section{
+    position: relative;
+    > a{
+        @include btn;
+    }
 }

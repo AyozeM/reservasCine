@@ -3,10 +3,19 @@
 section{
     display: flex;
     padding: 1%;
+    @media screen and (max-width:$tablet){
+        padding: 0;
+    }
     aside{
         padding: 1%;
+        @media screen and (max-width:$tablet){
+            padding: 0;
+            img{
+                width:100vw;
+            }            
+        }
     }
-    .description{
+    .description{    
         h3{
             padding:1% 0;
             border-bottom: thin solid;
@@ -15,6 +24,11 @@ section{
         iframe{
             width: 100%;
         }   
+        @media screen and (max-width:$tablet){
+            div{
+                margin:5%;
+            }
+        }
     }
     .timeTable{
         flex-basis:100%;
@@ -30,19 +44,31 @@ section{
                 flex-basis: (100%/3);
                 padding:.75%;
                 text-align: center;
+                @media screen and (max-width:$tablet) {
+                    padding:  2% .75%;
+                }
 
             }
-            &:nth-child(n+2):hover{
-                background-color:$rojo;
+            @media screen and (min-width:$tablet){
+                &:nth-child(n+2):hover{
+                    background-color:$rojo;
+                }
             }
             .btnFindChair{
                 background-color: $azul;
                 cursor: pointer;
             }
         }
+        @media screen and (max-width:$tablet) {
+            padding: 2% 5%;
+            font-size:.9em;
+        }
     }
     .title{
         font-weight: bold;
         font-size:1.2em;
+    }
+    @media screen and (max-width:$tablet) {
+        flex-direction: column;
     }
 }

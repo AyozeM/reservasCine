@@ -4,8 +4,18 @@
     @include barraProgreso;
 }
 .wrapper{
-    padding: 1%;display: flex;
+    padding: 1%;
+    display: flex;
     justify-content: space-between;
+    @media screen and (max-width:$tablet) {
+        flex-direction: column;
+        padding: 0;
+        a{
+            text-align: center;
+            margin:2%;
+            padding: 2;
+        }
+    }
 }
 .wrapper.details{
     display: flex;
@@ -28,6 +38,9 @@
             align-items: center;
             justify-content: center;
         }
+        @media screen and (max-width:$tablet){
+             margin: 3% 5%;
+        }
     }
 }
 .wrapper.form{
@@ -36,10 +49,17 @@
     justify-content: center;
     form{
         width:100%;
+        @media screen and (max-width:$tablet) {
+            height: 80vh;
+        }
     }
     p{
         width:50%;
         margin:3% 0;
+        @media screen and (max-width:$tablet) {
+            width: 90%;
+            margin:3%;
+        }
         .bar{
             border-bottom: .2em solid;
             background-color: transparent;

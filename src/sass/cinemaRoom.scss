@@ -1,6 +1,9 @@
 @import './_general.scss';
 #canvas{
     border: thin solid;
+    @media screen and (max-width:$tablet) {
+        width: 100vw;
+    }
 }
 section{
     display: flex;

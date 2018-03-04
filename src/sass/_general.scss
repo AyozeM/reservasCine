@@ -81,18 +81,20 @@ footer{
     @include general;
     display: flex;
     justify-content: space-between;
+    font-size:.5em;
     svg{
         display: block;
     }
     .date{
         display: flex;
         align-items: center;
+        
     }
-    #licencia{
+/*     #licencia{
         span{
             font-size: .5em;
         }
-    }
+    } */
 }
 
 .spinner{

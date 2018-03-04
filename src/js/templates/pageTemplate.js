@@ -18,7 +18,7 @@ export const setFooter = () =>{
 export const setHeader = () => {
 
     $('<h1>Cines Orotava</h1>').click(e=>{        
-        window.location = window.location.href.includes('github')?'reservasCine/dist/' :'/dist/';
+        window.location = window.location.href.includes('github')?'/reservasCine/dist/' :'/dist/';
     }).appendTo('header');    
     $('<div>',{class:'social'}).append(
         $('<span>').append(
